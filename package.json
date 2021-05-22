@@ -15,7 +15,6 @@
     "next": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-firebase-hooks": "^3.0.4",
     "styled-components": "^5.3.0"
   },
   "devDependencies": {
