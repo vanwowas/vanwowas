@@ -1,15 +1,15 @@
-import { AppProps } from "next/dist/next-server/lib/router/router";
-import Head from "next/head";
-import React from "react";
-import { createGlobalStyle } from "styled-components";
-import Skeleton from "../components/Skeleton";
-import colors from "../style/colors";
+import { AppProps } from 'next/dist/next-server/lib/router/router'
+import React from 'react'
+import { createGlobalStyle } from 'styled-components'
+import Header from '../components/Header'
+import AuthProvider from '../context/AuthContext'
+import colors from '../style/colors'
 
 export const routes = {
-  home: "/",
-  inspiration: "/inspiration",
-  category: "/category/:type"
-};
+    home: '/',
+    inspiration: '/inspiration',
+    category: '/category/:type',
+}
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -19,27 +19,21 @@ const GlobalStyle = createGlobalStyle`
   }
   html {
     background: ${colors.pageBackground};
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Nunito', sans-serif;
   }
   html, body {
     height: 100%;
   }
-`;
+`
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <Head>
-        <title>vanwowas</title>
-        <meta name="robots" content="noindex" />
-        <meta name="format-detection" content="telephone=no" />
-      </Head>
-      <Skeleton>
-        <Component {...pageProps} />
-      </Skeleton>
-      <GlobalStyle />
-    </>
-  );
+const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+    return (
+        <AuthProvider>
+            <GlobalStyle />
+            <Header />
+            <Component {...pageProps} />
+        </AuthProvider>
+    )
 }
 
-export default MyApp;
+export default App
