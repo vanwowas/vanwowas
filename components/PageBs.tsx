@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import React from 'react'
-import { breakpoints, upToBreakpoint } from '../style/breakpoints'
+import { upToBreakpoint } from '../style/breakpoints'
 
 type PageProps = {
     backgroundIllustration?: boolean

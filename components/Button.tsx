@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components'
-import colors, { Colors } from '../style/colors'
+import colors from '../style/colors'
 import { border, hover } from '../style/mixins'
 
 type ButtonProps = {
-    backgroundColor: keyof Colors['buttonBackground']
-    borderColor: keyof Colors['border']
-    color: keyof Colors['buttonText']
+    backgroundColor: keyof typeof colors['buttonBackground']
+    borderColor: keyof typeof colors['border']
+    color: keyof typeof colors['buttonText']
 }
 
 const buttonStyle = css<ButtonProps>`
