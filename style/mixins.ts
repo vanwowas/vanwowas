@@ -1,5 +1,5 @@
 import { css, FlattenSimpleInterpolation } from 'styled-components'
-import colors, { Colors } from './colors'
+import colors from './colors'
 
 export const hover = (
     style: FlattenSimpleInterpolation | string
@@ -49,7 +49,7 @@ export const aspectRatio = (
 
 export const border = (
     width: number,
-    color: keyof Colors['border'],
+    color: keyof typeof colors['border'],
     style?: FlattenSimpleInterpolation
 ): FlattenSimpleInterpolation => css`
     position: relative;
