@@ -6,50 +6,25 @@ const secondary = '#E15D3F'
 const tertiary = '#85CA93'
 const grey = '#b9b9b9'
 
-export type Colors = {
-    pageBackground: string
-    headerBackground: string
-    card: {
-        background: string
-        headline: string
-        description: string
-    }
-    textColor: {
-        primary: string
-        secondary: string
-        tertiary: string
-        white: string
-    }
-    buttonBackground: {
-        primary: string
-        secondary: string
-        tertiary: string
-        disabled: string
-    }
-    border: {
-        light: string
-        dark: string
-    }
-    buttonText: {
-        light: string
-        dark: string
-    }
-    linkText: string
-}
-
-const colors: Colors = {
+const colors = {
     pageBackground: lightGrey,
     headerBackground: white,
-    card: {
+    footerBackground: white,
+    spinner: secondary,
+    teaserCard: {
         background: primary,
         headline: tertiary,
-        description: white,
+        description: black,
+    },
+    infoCard: {
+        background: white,
     },
     textColor: {
         primary,
         secondary,
         tertiary,
         white,
+        black,
     },
     buttonBackground: {
         primary,

@@ -3,10 +3,17 @@ import styled from 'styled-components'
 import { stack } from '../style/mixins'
 import Button from '../components/Button'
 import Input from '../components/Input'
-import Page from '../components/Page'
 import { Headline1 } from '../style/typography'
-import { useAuth } from '../context/AuthContext'
-import useAuthenticatedRoute from '../hooks/useAuthenticatedRoute'
+import Page from '../components/Page'
+import {
+    AuthAction,
+    useAuthUser,
+    withAuthUser,
+    withAuthUserTokenSSR,
+} from 'next-firebase-auth'
+import Link from '../components/Link'
+import firebase from 'firebase'
+import { useRouter } from 'next/dist/client/router'
 
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {
@@ -25,23 +32,29 @@ const Form = styled.form`
     padding: 1rem;
     margin: auto;
 `
-const Signup: React.FC = () => {
-    const { signUpWithEmail, loading } = useAuth()
-    useAuthenticatedRoute('/')
 
-    const login = useCallback(
+const Signup: React.FC = () => {
+    const AuthUser = useAuthUser()
+    const router = useRouter()
+
+    const signup = useCallback(
         async (event: HTMLFormEvent) => {
             event.preventDefault()
             const { email, password } = event.target
             //TODO catch errors
-            await signUpWithEmail(email.value, password.value)
+            try {
+                await firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(email.value, password.value)
+                router.push('/')
+            } catch {}
         },
-        [signUpWithEmail]
+        [router]
     )
 
     return (
-        <Page>
-            <Form onSubmit={login}>
+        <Page user={AuthUser} withPadding>
+            <Form onSubmit={signup}>
                 <Headline1>SIGN UP</Headline1>
                 <Input placeholder="email" name="email" type="email" required />
                 <Input
@@ -51,7 +64,7 @@ const Signup: React.FC = () => {
                     required
                 />
                 <Button
-                    disabled={loading}
+                    disabled={false}
                     type="submit"
                     backgroundColor="secondary"
                     borderColor="dark"
@@ -59,9 +72,13 @@ const Signup: React.FC = () => {
                 >
                     sign up
                 </Button>
+                <Link href="/login">already have an account?</Link>
             </Form>
         </Page>
     )
 }
+export const getServerSideProps = withAuthUserTokenSSR({
+    whenAuthed: AuthAction.REDIRECT_TO_APP,
+})()
 
-export default Signup
+export default withAuthUser()(Signup)

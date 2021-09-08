@@ -1,8 +1,7 @@
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import React from 'react'
 import { createGlobalStyle } from 'styled-components'
-import Header from '../components/Header'
-import AuthProvider from '../context/AuthContext'
+import initAuth from '../firebase/initAuth'
 import colors from '../style/colors'
 
 export const routes = {
@@ -22,17 +21,25 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Nunito', sans-serif;
   }
   html, body {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    flex: 1;
+  }
+  body > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 `
+initAuth()
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return (
-        <AuthProvider>
+        <>
             <GlobalStyle />
-            <Header />
             <Component {...pageProps} />
-        </AuthProvider>
+        </>
     )
 }
 

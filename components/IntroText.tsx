@@ -22,6 +22,9 @@ const Intro = styled.section<Pick<Props, 'fullWidth'>>`
   ${Headline1} {
         color: ${colors.textColor.secondary};
     }
+    ${Paragraph} {
+        color: ${colors.textColor.black};
+    }
 `
 
 const IntroText: React.FC<Props> = ({

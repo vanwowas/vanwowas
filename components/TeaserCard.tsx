@@ -10,9 +10,7 @@ import { LinkButton } from './Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    flex: 1 0 250px;
-    background-color: ${colors.card.background};
-    ${border(2, 'light')}
+    ${border(2, 'dark')}
 `
 
 const ImageContainer = styled.div`
@@ -25,10 +23,10 @@ const Info = styled.div`
     padding: 0 2rem 2rem;
     ${stack('1rem', 'y')}
     ${Headline2} {
-        color: ${colors.card.headline};
+        color: ${colors.teaserCard.headline};
     }
     ${Paragraph} {
-        color: ${colors.card.description};
+        color: ${colors.teaserCard.description};
     }
 `
 
@@ -37,7 +35,6 @@ const StyledLinkButton = styled(LinkButton)`
     top: calc(100% - 1rem);
     right: 1rem;
     z-index: 2;
-    background-color: ${colors.buttonBackground.primary};
 `
 type Props = {
     headline: string
@@ -45,7 +42,7 @@ type Props = {
     href: LinkProps['href']
 }
 
-const Card: React.FC<Props> = ({ headline, description, href }) => {
+const TeaserCard: React.FC<Props> = ({ headline, description, href }) => {
     return (
         <Container>
             <ImageContainer>
@@ -63,7 +60,7 @@ const Card: React.FC<Props> = ({ headline, description, href }) => {
             <Link href={href} passHref>
                 <StyledLinkButton
                     backgroundColor="secondary"
-                    borderColor="light"
+                    borderColor="dark"
                     color="light"
                 >
                     see more
@@ -73,4 +70,4 @@ const Card: React.FC<Props> = ({ headline, description, href }) => {
     )
 }
 
-export default Card
+export default TeaserCard
