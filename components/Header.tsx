@@ -5,7 +5,8 @@ import Button, { LinkButton } from './Button'
 import Link from './Link'
 import { stack } from '../style/mixins'
 import { AuthUserContext } from 'next-firebase-auth'
-
+import User from '../style/icons/user.svg'
+import RouterLink from 'next/link'
 const Container = styled.header`
     display: flex;
     flex-direction: row;
@@ -16,6 +17,11 @@ const Container = styled.header`
     padding: 1rem;
     & > * {
         ${stack('1rem', 'x')}
+    }
+    svg {
+        width: 2.5rem;
+        margin-right: 1rem;
+        cursor: pointer;
     }
 `
 
@@ -50,14 +56,21 @@ const Header: React.FC<Props> = ({ user }) => {
                     </LinkButton>
                 </div>
             ) : (
-                <Button
-                    backgroundColor="secondary"
-                    borderColor="dark"
-                    color="dark"
-                    onClick={user.signOut}
-                >
-                    logout
-                </Button>
+                <div>
+                    <RouterLink href="/user">
+                        <div>
+                            <User />
+                        </div>
+                    </RouterLink>
+                    <Button
+                        backgroundColor="secondary"
+                        borderColor="dark"
+                        color="dark"
+                        onClick={user.signOut}
+                    >
+                        logout
+                    </Button>
+                </div>
             )}
         </Container>
     )

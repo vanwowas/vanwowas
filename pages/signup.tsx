@@ -17,6 +17,9 @@ import { useRouter } from 'next/dist/client/router'
 
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {
+        name: {
+            value: string
+        }
         email: {
             value: string
         }
@@ -40,12 +43,13 @@ const Signup: React.FC = () => {
     const signup = useCallback(
         async (event: HTMLFormEvent) => {
             event.preventDefault()
-            const { email, password } = event.target
+            const { email, password, name } = event.target
             //TODO catch errors
             try {
-                await firebase
+                const user = await firebase
                     .auth()
                     .createUserWithEmailAndPassword(email.value, password.value)
+                user.user?.updateProfile({ displayName: name.value })
                 router.push('/')
             } catch {}
         },
@@ -56,6 +60,7 @@ const Signup: React.FC = () => {
         <Page user={AuthUser} withPadding>
             <Form onSubmit={signup}>
                 <Headline1>SIGN UP</Headline1>
+                <Input placeholder="name" name="name" type="text" required />
                 <Input placeholder="email" name="email" type="email" required />
                 <Input
                     placeholder="password"

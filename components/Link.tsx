@@ -6,4 +6,5 @@ const Link = styled.a`
     color: ${colors.linkText};
     padding: 0.5em 0;
 `
+
 export default Link

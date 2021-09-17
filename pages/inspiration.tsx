@@ -1,28 +1,20 @@
-// import { InferGetServerSidePropsType } from 'next'
 import {
     useAuthUser,
     withAuthUser,
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 import React from 'react'
+import ImageGrid from '../components/ImageGrid'
 import Page from '../components/Page'
-
-// export async function getStaticProps(): Promise<{
-//     props: {
-//         name: string
-//     }
-// }> {
-//     return {
-//         props: {
-//             name: 'inspiration',
-//         },
-//     }
-// }
 
 const InspirationPage: React.FC = () => {
     const AuthUser = useAuthUser()
 
-    return <Page user={AuthUser}>inspiration</Page>
+    return (
+        <Page user={AuthUser} withPadding>
+            <ImageGrid />
+        </Page>
+    )
 }
 
 export const getServerSideProps = withAuthUserTokenSSR()()

@@ -34,7 +34,7 @@ const Form = styled.form`
 
 const Reset: React.FC = () => {
     const AuthUser = useAuthUser()
-    const [finished, setFinished] = useState(true)
+    const [finished, setFinished] = useState(false)
     const handleSubmit = useCallback(async (event: HTMLFormEvent) => {
         event.preventDefault()
         const { email } = event.target
