@@ -6,6 +6,7 @@ type ButtonProps = {
     backgroundColor: keyof typeof colors['buttonBackground']
     borderColor: keyof typeof colors['border']
     color: keyof typeof colors['buttonText']
+    shakeHover?: boolean
 }
 
 const buttonStyle = css<ButtonProps>`
@@ -22,6 +23,7 @@ const buttonStyle = css<ButtonProps>`
     ${hover(css`
         transform: translate3d(0.2em, 0.2em, 0);
     `)}
+    /* TODO: implement shakehover */
     &:disabled {
         ::before {
             background-color: ${colors.buttonBackground.disabled};

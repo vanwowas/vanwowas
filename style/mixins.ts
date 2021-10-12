@@ -1,4 +1,4 @@
-import { css, FlattenSimpleInterpolation } from 'styled-components'
+import { css, FlattenSimpleInterpolation, keyframes } from 'styled-components'
 import colors from './colors'
 
 export const hover = (
@@ -17,6 +17,20 @@ export const hover = (
                 ${style}
             }
         }
+    `
+}
+
+export const fadeIn = (duration: number): FlattenSimpleInterpolation => {
+    const animation = keyframes`
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    `
+    return css`
+        animation: ${animation} ${duration}ms ease-in-out forwards;
     `
 }
 

@@ -23,7 +23,8 @@ const firebaseConfig = {
 
 try {
     Firebase.initializeApp(firebaseConfig)
-} catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} catch (err: any) {
     if (!/already exists/.test(err.message)) {
         console.error('Firebase initialization error', err.stack)
     }

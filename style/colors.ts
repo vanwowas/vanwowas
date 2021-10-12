@@ -39,6 +39,7 @@ const colors = {
     buttonText: {
         dark: black,
         light: white,
+        pageBackground: lightGrey,
     },
     linkText: black,
 }

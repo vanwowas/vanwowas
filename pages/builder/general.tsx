@@ -49,7 +49,7 @@ const General: React.FC = () => {
         async (event: HTMLFormEvent) => {
             event.preventDefault()
             // const { name, about, zip, phone } = event.target
-            router.push('/builder/add-build')
+            router.push('/builder/builds')
         },
         [router]
     )
