@@ -2,7 +2,7 @@
 import { init } from 'next-firebase-auth'
 
 import getConfig from 'next/config'
-import fb from '../fb.json'
+import fb from '../../fb.json'
 const { publicRuntimeConfig } = getConfig()
 
 const {
@@ -31,6 +31,7 @@ const initAuth: () => void = () => {
             authDomain: FIREBASE_AUTH_DOMAIN,
             projectId: FIREBASE_PROJECT_ID,
             appId: FIREBASE_APP_ID,
+            storageBucket: 'vanwowas-f6f3b.appspot.com',
         },
         cookies: {
             name: 'vanwowas', // required

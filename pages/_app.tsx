@@ -1,8 +1,8 @@
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import React from 'react'
 import { createGlobalStyle } from 'styled-components'
-import initAuth from '../firebase/initAuth'
-import colors from '../style/colors'
+import initAuth from '../lib/firebase/initAuth'
+import colors from '../lib/style/colors'
 
 export const routes = {
     home: '/',

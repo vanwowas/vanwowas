@@ -1,22 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
-import IntroText from '../components/IntroText'
-import { aspectRatio, stack } from '../style/mixins'
-import TeaserCard from '../components/TeaserCard'
-import { upToBreakpoint } from '../style/breakpoints'
-import Image, { ImageContainer } from '../components/Image'
-import colors from '../style/colors'
+import IntroText from '../lib/components/IntroText'
+import { aspectRatio, stack } from '../lib/style/mixins'
+import TeaserCard from '../lib/components/TeaserCard'
+import { upToBreakpoint } from '../lib/style/breakpoints'
+import Image, { ImageContainer } from '../lib/components/Image'
+import colors from '../lib/style/colors'
 import {
+    AuthAction,
+    getFirebaseAdmin,
     useAuthUser,
     withAuthUser,
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
-import Page from '../components/Page'
-import InfoCard from '../components/InfoCard'
-import FindManufactur from '../components/FindManufactur'
-import ImageGrid from '../components/ImageGrid'
-import { Headline1 } from '../style/typography'
-import { LinkButton } from '../components/Button'
+import Page from '../lib/components/Page'
+import BuildCard from '../lib/components/BuildCard'
+import FindManufactur from '../lib/components/FindManufactur'
+import ImageGrid from '../lib/components/ImageGrid'
+import { Headline1 } from '../lib/style/typography'
+import { LinkButton } from '../lib/components/Button'
+import { Build } from '../lib/types/db'
+import { firestore } from 'firebase-admin'
 
 const Stage = styled.div`
     position: absolute;
@@ -42,7 +46,7 @@ const CardContainer = styled.div`
     padding: 1rem 0;
     ${stack('2rem', 'x')}
     ${upToBreakpoint('medium')} {
-        ${stack('1rem', 'y')}
+        ${stack('4rem', 'y')}
     }
 `
 
@@ -57,15 +61,16 @@ const ImageWithText = styled.div`
     }
 `
 
-const InspirationContainer = styled.div`
-    ${stack('3rem', 'y')}
-    ${LinkButton} {
-        margin-left: auto;
-        margin-right: auto;
-    }
+const StyledLinkButton = styled(LinkButton)`
+    margin-left: auto;
+    margin-right: auto;
 `
 
-const IndexPage: React.FC = () => {
+type Props = {
+    builds: Build[]
+}
+
+const IndexPage: React.FC<Props> = ({ builds }) => {
     const AuthUser = useAuthUser()
     return (
         <Page user={AuthUser} withPadding>
@@ -122,7 +127,7 @@ const IndexPage: React.FC = () => {
                         src="https://images.unsplash.com/photo-1509721926668-25a8dd274c1b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80"
                     />
                 </ImageWithText>
-                <InspirationContainer>
+                <div>
                     <Headline1>inspiration</Headline1>
                     <ImageGrid
                         images={[
@@ -135,63 +140,36 @@ const IndexPage: React.FC = () => {
                             'https://images.unsplash.com/photo-1512075735503-c265d3d40579?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1953&q=80',
                         ]}
                     />
-                    <LinkButton
+                    <StyledLinkButton
                         backgroundColor="primary"
                         borderColor="dark"
                         color="dark"
                         href="/inspiration"
                     >
                         see more
-                    </LinkButton>
-                </InspirationContainer>
+                    </StyledLinkButton>
+                </div>
                 <FindManufactur />
-                <InfoCard
-                    headline="manufactur"
-                    text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    bulletPoints={['feature 1', 'feature 2', 'feature 3']}
-                    properties={['cheap', 'nearby']}
-                    image="https://images.unsplash.com/photo-1501722969499-fa2de05a9335?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1948&q=80"
-                />
-                <InfoCard
-                    headline="manufactur"
-                    text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    bulletPoints={['feature 1', 'feature 2', 'feature 3']}
-                    properties={['cheap', 'nearby']}
-                    image="https://images.unsplash.com/photo-1501722969499-fa2de05a9335?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1948&q=80"
-                />
-                <InfoCard
-                    headline="manufactur"
-                    text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    bulletPoints={['feature 1', 'feature 2', 'feature 3']}
-                    properties={['cheap', 'nearby']}
-                    image="https://images.unsplash.com/photo-1501722969499-fa2de05a9335?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1948&q=80"
-                />
-                <InfoCard
-                    headline="manufactur"
-                    text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    bulletPoints={['feature 1', 'feature 2', 'feature 3']}
-                    properties={['cheap', 'nearby']}
-                    image="https://images.unsplash.com/photo-1501722969499-fa2de05a9335?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1948&q=80"
-                />
-                <InfoCard
-                    headline="manufactur"
-                    text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    bulletPoints={['feature 1', 'feature 2', 'feature 3']}
-                    properties={['cheap', 'nearby']}
-                    image="https://images.unsplash.com/photo-1501722969499-fa2de05a9335?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1948&q=80"
-                />
-                <InfoCard
-                    headline="manufactur"
-                    text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    bulletPoints={['feature 1', 'feature 2', 'feature 3']}
-                    properties={['cheap', 'nearby']}
-                    image="https://images.unsplash.com/photo-1501722969499-fa2de05a9335?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1948&q=80"
-                />
+                {builds.map((b, i) => (
+                    <BuildCard key={i} build={b} />
+                ))}
             </Content>
         </Page>
     )
 }
 
-export const getServerSideProps = withAuthUserTokenSSR()()
+export const getServerSideProps = withAuthUserTokenSSR({
+    whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async () => {
+    const db = getFirebaseAdmin().firestore()
+    const builds = db.collection('builds').limit(10)
 
-export default withAuthUser()(IndexPage)
+    const querySnapshot = await builds.get<Build>()
+
+    const bf: Build[] = []
+    querySnapshot.forEach((b) => bf.push({ ...b.data(), id: b.id } as Build))
+    return {
+        props: { builds: bf },
+    }
+})
+export default withAuthUser<Props>()(IndexPage)

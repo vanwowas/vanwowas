@@ -5,7 +5,7 @@ import {
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 import React from 'react'
-import Page from '../../components/Page'
+import Page from '../../lib/components/Page'
 
 // export async function getServerSideProps({ params }: any) {
 //     return {

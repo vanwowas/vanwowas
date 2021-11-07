@@ -4,8 +4,8 @@ import {
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 import React from 'react'
-import ImageGrid from '../components/ImageGrid'
-import Page from '../components/Page'
+import ImageGrid from '../lib/components/ImageGrid'
+import Page from '../lib/components/Page'
 
 const InspirationPage: React.FC = () => {
     const AuthUser = useAuthUser()

@@ -1,10 +1,10 @@
 import React, { FormEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { stack } from '../style/mixins'
-import Button, { LinkButton } from '../components/Button'
-import Input from '../components/Input'
-import { Headline1 } from '../style/typography'
-import Page from '../components/Page'
+import { stack } from '../lib/style/mixins'
+import Button, { LinkButton } from '../lib/components/Button'
+import Input from '../lib/components/Input'
+import { Headline1 } from '../lib/style/typography'
+import Page from '../lib/components/Page'
 import firebase from 'firebase/app'
 
 import {

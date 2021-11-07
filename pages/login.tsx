@@ -1,19 +1,19 @@
 import React, { FormEvent, useCallback } from 'react'
 import styled from 'styled-components'
-import { stack } from '../style/mixins'
-import Button from '../components/Button'
-import Input from '../components/Input'
-import { Headline1 } from '../style/typography'
+import { stack } from '../lib/style/mixins'
+import Button from '../lib/components/Button'
+import Input from '../lib/components/Input'
+import { Headline1 } from '../lib/style/typography'
 import {
     AuthAction,
     useAuthUser,
     withAuthUser,
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
-import Firebase from '../firebase'
-import Page from '../components/Page'
+import Firebase from '../lib/firebase'
+import Page from '../lib/components/Page'
 import { useRouter } from 'next/dist/client/router'
-import Link from '../components/Link'
+import Link from '../lib/components/Link'
 
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {

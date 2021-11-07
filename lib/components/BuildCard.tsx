@@ -1,13 +1,17 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import colors from '../style/colors'
-import { aspectRatio, hover, stack } from '../style/mixins'
+import { aspectRatio, stack } from '../style/mixins'
 import { Headline2, Paragraph } from '../style/typography'
 import Image from './Image'
 import Cheap from '../style/icons/cheap.svg'
 import MapPin from '../style/icons/map-pin.svg'
 import { upToBreakpoint } from '../style/breakpoints'
 import Favorite from '../style/icons/star.svg'
+import { LinkButton } from './Button'
+import Edit from '../style/icons/edit.svg'
+import Link from 'next/link'
+import { Build } from '../types/db'
 
 const ImageContainer = styled.div`
     width: 40%;
@@ -59,44 +63,18 @@ const IconContainer = styled.div`
     ${stack('1rem', 'x')}
 `
 
-const FavoriteContainer = styled.div`
+const RoundButton = styled(LinkButton)`
     position: absolute;
     top: -2rem;
     right: 20%;
-    padding: 0.5rem;
-    border-radius: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
     svg {
-        width: 2rem;
-        height: 2rem;
-        z-index: 1;
+        height: 1.5rem;
+        width: 1.5rem;
     }
-    ${hover(css`
-        transform: translate3d(0.2em, 0.2em, 0);
-    `)}
-    ::before {
-        content: '';
-        position: absolute;
-        top: -0.4em;
-        right: 0.4em;
-        bottom: 0.4em;
-        left: -0.4em;
-        border-radius: 100%;
-        background-color: ${colors.buttonBackground.secondary};
-        transition: transform 250ms ease-in-out;
-    }
-    ::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px solid #000;
-        border-radius: 100%;
+    ${upToBreakpoint('medium')} {
+        bottom: -2rem;
+        top: auto;
+        right: 10%;
     }
 `
 
@@ -106,25 +84,11 @@ const icons = {
 }
 
 type Props = {
-    image: string
-    headline: string
-    text: string
-    bulletPoints: string[]
-    properties: (keyof typeof icons)[]
-} & (
-    | { favorite?: false; onFavoriteClick?: never }
-    | { favorite: true; onFavoriteClick: () => void }
-)
+    build: Build
+}
 
-const InfoCard: React.FC<Props> = ({
-    image,
-    headline,
-    text,
-    bulletPoints,
-    properties,
-    favorite,
-    onFavoriteClick,
-}) => {
+const BuildCard: React.FC<Props> = ({ build }) => {
+    // const { title, description, images, price, id } = build
     return (
         <Container>
             <ImageContainer>
@@ -151,14 +115,31 @@ const InfoCard: React.FC<Props> = ({
                         <React.Fragment key={p}>{icons[p]}</React.Fragment>
                     ))}
                 </IconContainer>
-                {favorite && (
-                    <FavoriteContainer onClick={onFavoriteClick}>
-                        <Favorite />
-                    </FavoriteContainer>
+                {(onFavoriteClick || editHref) && editHref ? (
+                    <Link href={editHref} passHref>
+                        <RoundButton
+                            round
+                            backgroundColor="primary"
+                            color="light"
+                            borderColor="dark"
+                        >
+                            {onFavoriteClick ? <Favorite /> : <Edit />}
+                        </RoundButton>
+                    </Link>
+                ) : (
+                    <RoundButton
+                        round
+                        backgroundColor="primary"
+                        color="light"
+                        borderColor="dark"
+                        onClick={onFavoriteClick}
+                    >
+                        {onFavoriteClick ? <Favorite /> : <Edit />}
+                    </RoundButton>
                 )}
             </InfoContainer>
         </Container>
     )
 }
 
-export default InfoCard
+export default BuildCard

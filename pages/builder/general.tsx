@@ -1,4 +1,5 @@
 import {
+    AuthAction,
     useAuthUser,
     withAuthUser,
     withAuthUserTokenSSR,
@@ -6,13 +7,17 @@ import {
 import { useRouter } from 'next/dist/client/router'
 import React, { FormEvent, useCallback } from 'react'
 import styled from 'styled-components'
-import Button from '../../components/Button'
-import Input from '../../components/Input'
-import Page from '../../components/Page'
-import TextArea from '../../components/TextArea'
-import colors from '../../style/colors'
-import { stack } from '../../style/mixins'
-import { Headline1 } from '../../style/typography'
+import Button from '../../lib/components/Button'
+import Input from '../../lib/components/Input'
+import Page from '../../lib/components/Page'
+import TextArea from '../../lib/components/TextArea'
+import db from '../../lib/db'
+import { createBuilder, updateUser } from '../../lib/db/utils'
+import colors from '../../lib/style/colors'
+import { stack } from '../../lib/style/mixins'
+import { Headline1 } from '../../lib/style/typography'
+import { Builder } from '../../lib/types/db'
+import { User } from '../../lib/types/user'
 
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {
@@ -41,17 +46,29 @@ const Form = styled.form`
     }
 `
 
-const General: React.FC = () => {
+type Props = {
+    user: User
+    builder: Builder | null
+}
+
+const General: React.FC<Props> = ({ user, builder }) => {
     const AuthUser = useAuthUser()
     const router = useRouter()
-
+    const { name } = user
     const submit = useCallback(
         async (event: HTMLFormEvent) => {
             event.preventDefault()
-            // const { name, about, zip, phone } = event.target
+            const { name, about, zip, phone } = event.target
+            if (!AuthUser.id) return
+            await updateUser(AuthUser.id, { name: name.value, isBuilder: true })
+            await createBuilder(AuthUser.id, {
+                description: about.value,
+                phone: phone.value,
+                zip: zip.value,
+            })
             router.push('/builder/builds')
         },
-        [router]
+        [AuthUser.id, router]
     )
     return (
         <Page user={AuthUser} withPadding>
@@ -59,27 +76,34 @@ const General: React.FC = () => {
                 <Headline1>Name</Headline1>
                 <Input
                     type="text"
-                    defaultValue={AuthUser.displayName ?? ''}
+                    defaultValue={name}
                     placeholder="Dein Name"
+                    name="name"
                 />
                 <Headline1>Über dich</Headline1>
                 <TextArea
+                    defaultValue={builder?.description}
                     placeholder="Beschreibe deine Manufaktur ein bisschen..."
                     rows={5}
+                    name="about"
                 />
                 <Headline1>Wo baust du aus?</Headline1>
                 <Input
                     placeholder="PLZ"
                     type="text"
+                    defaultValue={builder?.zip}
                     inputMode="numeric"
                     maxLength={5}
                     minLength={5}
+                    name="zip"
                     pattern="^(?(^00000(|-0000))|(\d{5}(|-\d{4})))$"
                 />
                 <Headline1>Telefon</Headline1>
                 <Input
                     placeholder="Telefonnummer"
+                    defaultValue={builder?.phone}
                     type="text"
+                    name="phone"
                     inputMode="numeric"
                 />
                 <div>
@@ -98,6 +122,24 @@ const General: React.FC = () => {
     )
 }
 
-export const getServerSideProps = withAuthUserTokenSSR()()
+export const getServerSideProps = withAuthUserTokenSSR({
+    whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async ({ AuthUser }) => {
+    if (AuthUser.id) {
+        const user = await db.getUser(AuthUser.id)
+        const builder = await db.getBuilder(AuthUser.id)
+        if (user) {
+            return {
+                props: { user, builder: builder || null },
+            }
+        }
+    }
+    return {
+        redirect: {
+            permanent: false,
+            destination: '/login',
+        },
+    }
+})
 
-export default withAuthUser()(General)
+export default withAuthUser<Props>()(General)

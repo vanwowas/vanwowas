@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { unsetAuthCookies } from 'next-firebase-auth'
-import initAuth from '../../firebase/initAuth'
+import initAuth from '../../lib/firebase/initAuth'
 
 initAuth()
 

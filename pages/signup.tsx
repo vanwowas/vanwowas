@@ -1,19 +1,19 @@
 import React, { FormEvent, useCallback } from 'react'
 import styled from 'styled-components'
-import { stack } from '../style/mixins'
-import Button from '../components/Button'
-import Input from '../components/Input'
-import { Headline1 } from '../style/typography'
-import Page from '../components/Page'
+import { stack } from '../lib/style/mixins'
+import Button from '../lib/components/Button'
+import Input from '../lib/components/Input'
+import { Headline1 } from '../lib/style/typography'
+import Page from '../lib/components/Page'
 import {
     AuthAction,
     useAuthUser,
     withAuthUser,
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
-import Link from '../components/Link'
-import firebase from 'firebase'
+import Link from '../lib/components/Link'
 import { useRouter } from 'next/dist/client/router'
+import { createUser } from '../lib/db/utils'
 
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {
@@ -46,11 +46,14 @@ const Signup: React.FC = () => {
             const { email, password, name } = event.target
             //TODO catch errors
             try {
-                const user = await firebase
-                    .auth()
-                    .createUserWithEmailAndPassword(email.value, password.value)
-                user.user?.updateProfile({ displayName: name.value })
-                router.push('/')
+                await createUser({
+                    email: email.value,
+                    password: password.value,
+                    name: name.value,
+                    isBuilder: false,
+                })
+
+                router.push('/user')
             } catch {}
         },
         [router]

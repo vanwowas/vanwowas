@@ -7,14 +7,16 @@ type ButtonProps = {
     borderColor: keyof typeof colors['border']
     color: keyof typeof colors['buttonText']
     shakeHover?: boolean
+    round?: boolean
 }
 
 const buttonStyle = css<ButtonProps>`
+    --border-radius: ${(p) => (p.round ? '100rem' : '0.5rem')};
     outline: none;
     border: none;
     text-decoration: none;
     cursor: pointer;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius);
     padding: 0.75rem 1rem;
     background-color: transparent;
     color: ${(p) => colors.buttonText[p.color]};
@@ -34,7 +36,7 @@ const buttonStyle = css<ButtonProps>`
         content: '';
         display: block;
         position: absolute;
-        border-radius: 0.5rem;
+        border-radius: var(--border-radius);
         top: -0.4em;
         right: 0.4em;
         bottom: 0.4em;
@@ -48,7 +50,7 @@ const buttonStyle = css<ButtonProps>`
             2,
             p.borderColor,
             css`
-                border-radius: 0.5rem;
+                border-radius: var(--border-radius);
             `
         )}
 `
