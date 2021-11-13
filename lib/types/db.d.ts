@@ -12,17 +12,25 @@ export type GeneralInfos = {
 }
 
 export type Build = {
+    id: string
     title: string
     description: string
     price: string
-    images?: Image[]
+    images: Image[] | null
     userId: string
-    zip: string
+}
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+export type User = {
+    name: string
+    isBuilder: boolean
 }
 
 export type Builds = FirebaseFirestore.QueryDocumentSnapshot<Build>[]
 
 export type Image = {
     url: string
-    description?: string
+    description: string | null
 }

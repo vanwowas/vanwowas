@@ -8,7 +8,8 @@ import { AuthUserContext } from 'next-firebase-auth'
 import User from '../style/icons/user.svg'
 import RouterLink from 'next/link'
 import Logo from '../style/icons/logo.svg'
-import { upFromBreakpoint, upToBreakpoint } from '../style/breakpoints'
+import { upToBreakpoint } from '../style/breakpoints'
+
 const Container = styled.header`
     position: sticky;
     top: 0;
@@ -44,13 +45,7 @@ const Container = styled.header`
     }
 `
 
-const LinkContainer = styled.div`
-    /* ${upToBreakpoint('medium')} {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-    } */
-`
+const LinkContainer = styled.div``
 
 const LogoContainer = styled.div`
     width: 7rem;

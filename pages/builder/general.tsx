@@ -16,8 +16,7 @@ import { createBuilder, updateUser } from '../../lib/db/utils'
 import colors from '../../lib/style/colors'
 import { stack } from '../../lib/style/mixins'
 import { Headline1 } from '../../lib/style/typography'
-import { Builder } from '../../lib/types/db'
-import { User } from '../../lib/types/user'
+import { Builder, User } from '../../lib/types/db'
 
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {

@@ -1,22 +1,22 @@
+import firebase from 'firebase'
 import {
     AuthAction,
-    getFirebaseAdmin,
     useAuthUser,
     withAuthUser,
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
+import { useRouter } from 'next/dist/client/router'
 
 import React, { useCallback, useState } from 'react'
-import Button from '../../../lib/components/Button'
-import Page from '../../../lib/components/Page'
-
-import { Headline1 } from '../../../lib/style/typography'
 import styled from 'styled-components'
-import { stack } from '../../../lib/style/mixins'
-import { useRouter } from 'next/dist/client/router'
-import ImageDrop, { ImageFile } from '../../../lib/components/ImageDrop'
-import { Build, Image } from '../../../lib/types/db'
-import firebase from 'firebase'
+import Button from '../../../../lib/components/Button'
+import ImageDrop, { ImageFile } from '../../../../lib/components/ImageDrop'
+import Page from '../../../../lib/components/Page'
+import db from '../../../../lib/db'
+import { updateBuild } from '../../../../lib/db/utils'
+import { stack } from '../../../../lib/style/mixins'
+import { Headline1 } from '../../../../lib/style/typography'
+import { Build, Image } from '../../../../lib/types/db'
 
 const StyledPage = styled(Page)`
     ${stack('3rem', 'y')}
@@ -29,7 +29,6 @@ const AddImages: React.FC<Props> = ({ build }) => {
     const AuthUser = useAuthUser()
     const router = useRouter()
     const [images, setImages] = useState<ImageFile[]>([])
-    console.log(build)
     const submit = useCallback(async () => {
         const storage = firebase.storage()
         const storageRef = storage.ref()
@@ -41,18 +40,16 @@ const AddImages: React.FC<Props> = ({ build }) => {
                 const url = await imageRef.getDownloadURL()
                 snapshots.push({
                     url,
-                    description: image.description,
+                    description: image.description || null,
                 })
             }
         }
-        console.log(snapshots)
-        await firebase
-            .firestore()
-            .collection('builds')
-            .doc(build.id)
-            .set({ images: 'snapshots' })
+        await updateBuild({
+            ...build,
+            images: [...(build.images ?? []), ...snapshots],
+        })
         router.push('/builder/builds')
-    }, [build.id, images, router])
+    }, [build, images, router])
 
     return (
         <StyledPage user={AuthUser} withPadding>
@@ -71,22 +68,23 @@ const AddImages: React.FC<Props> = ({ build }) => {
         </StyledPage>
     )
 }
-
 export const getServerSideProps = withAuthUserTokenSSR({
     whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async ({ query }) => {
-    if (query.id && typeof query.id === 'string') {
-        const db = getFirebaseAdmin().firestore()
-        const querySnapshot = await db.collection('builds').doc(query.id).get()
-
-        return {
-            props: { build: querySnapshot.data() },
+})(async ({ params, AuthUser }) => {
+    if (AuthUser.id) {
+        const build = await db.getBuild(params?.id?.toString())
+        if (build?.userId === AuthUser.id) {
+            return {
+                props: {
+                    build,
+                },
+            }
         }
     }
     return {
         redirect: {
             permanent: false,
-            destination: '/builder/builds',
+            destination: '/login',
         },
     }
 })

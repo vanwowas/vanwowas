@@ -36,16 +36,9 @@ export const createBuilder = async (
         .set(data, { merge: true })
 }
 
-export const createBuild = async (data: Build): Promise<string> => {
-    return await (
-        await firebase.firestore().collection('builds').add(data)
-    ).id
-}
-
-export const updateBuild = async (id: string, data: Build): Promise<void> => {
-    await firebase
-        .firestore()
-        .collection('builders')
-        .doc(id)
-        .set(data, { merge: true }).
+export const updateBuild = async (data: Partial<Build>): Promise<string> => {
+    const doc = await firebase.firestore().collection('builds').doc(data.id)
+    const updatedFields = JSON.parse(JSON.stringify(data)) as Partial<Build>
+    await doc.set(updatedFields, { merge: true })
+    return doc.id
 }

@@ -1,7 +1,7 @@
 // next.config.js
 module.exports = {
     images: {
-        domains: ['images.unsplash.com'],
+        domains: ['images.unsplash.com', 'firebasestorage.googleapis.com'],
     },
     reactStrictMode: true,
     publicRuntimeConfig: {

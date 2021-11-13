@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import colors from '../style/colors'
 import { border, hover } from '../style/mixins'
 
-type ButtonProps = {
+export type ButtonProps = {
     backgroundColor: keyof typeof colors['buttonBackground']
     borderColor: keyof typeof colors['border']
     color: keyof typeof colors['buttonText']

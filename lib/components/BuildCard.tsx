@@ -4,14 +4,14 @@ import colors from '../style/colors'
 import { aspectRatio, stack } from '../style/mixins'
 import { Headline2, Paragraph } from '../style/typography'
 import Image from './Image'
-import Cheap from '../style/icons/cheap.svg'
-import MapPin from '../style/icons/map-pin.svg'
+// import Cheap from '../style/icons/cheap.svg'
+// import MapPin from '../style/icons/map-pin.svg'
 import { upToBreakpoint } from '../style/breakpoints'
-import Favorite from '../style/icons/star.svg'
-import { LinkButton } from './Button'
-import Edit from '../style/icons/edit.svg'
-import Link from 'next/link'
+// import { LinkButton } from './Button'
 import { Build } from '../types/db'
+import { LinkButton } from './Button'
+import Link from 'next/link'
+import Edit from '../style/icons/edit.svg'
 
 const ImageContainer = styled.div`
     width: 40%;
@@ -59,9 +59,9 @@ const List = styled.ul`
     ${stack('1em', 'y')}
 `
 
-const IconContainer = styled.div`
-    ${stack('1rem', 'x')}
-`
+// const IconContainer = styled.div`
+//     ${stack('1rem', 'x')}
+// `
 
 const RoundButton = styled(LinkButton)`
     position: absolute;
@@ -78,44 +78,59 @@ const RoundButton = styled(LinkButton)`
     }
 `
 
-const icons = {
-    cheap: <Cheap />,
-    nearby: <MapPin />,
-}
+// const icons = {
+//     cheap: <Cheap />,
+//     nearby: <MapPin />,
+// }
 
 type Props = {
     build: Build
+    editable?: boolean
 }
 
-const BuildCard: React.FC<Props> = ({ build }) => {
-    // const { title, description, images, price, id } = build
+const BuildCard: React.FC<Props> = ({ build, editable }) => {
+    const { title, description, images } = build
     return (
         <Container>
             <ImageContainer>
-                <Image
-                    src={image}
-                    alt="infocardimage"
-                    objectFit="cover"
-                    layout="fill"
-                />
+                {images && (
+                    <Image
+                        src={images[0].url}
+                        alt="infocardimage"
+                        objectFit="cover"
+                        layout="fill"
+                    />
+                )}
             </ImageContainer>
             <InfoContainer>
-                <Headline2>{headline}</Headline2>
-                <Paragraph>{text}</Paragraph>
+                <Headline2>{title}</Headline2>
+                <Paragraph>{description}</Paragraph>
 
                 <List>
-                    {bulletPoints.map((b) => (
+                    {['bulletPoints', 'FS'].map((b) => (
                         <li key={b}>
                             <Paragraph>{b}</Paragraph>
                         </li>
                     ))}
                 </List>
-                <IconContainer>
-                    {properties.map((p) => (
+                {/* <IconContainer>
+                    {['cheap', 'nearby'].map((p: any) => (
                         <React.Fragment key={p}>{icons[p]}</React.Fragment>
                     ))}
-                </IconContainer>
-                {(onFavoriteClick || editHref) && editHref ? (
+                </IconContainer> */}
+                {editable && (
+                    <Link href={`/builder/build/text/${build.id}`} passHref>
+                        <RoundButton
+                            round
+                            backgroundColor="primary"
+                            color="light"
+                            borderColor="dark"
+                        >
+                            <Edit />
+                        </RoundButton>
+                    </Link>
+                )}
+                {/* {(onFavoriteClick || editable) && editHref ? (
                     <Link href={editHref} passHref>
                         <RoundButton
                             round
@@ -136,7 +151,7 @@ const BuildCard: React.FC<Props> = ({ build }) => {
                     >
                         {onFavoriteClick ? <Favorite /> : <Edit />}
                     </RoundButton>
-                )}
+                )} */}
             </InfoContainer>
         </Container>
     )

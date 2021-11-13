@@ -1,6 +1,6 @@
 import { getFirebaseAdmin } from 'next-firebase-auth'
-import { Build, Builder } from '../types/db'
-
+import { Build, Builder, User } from '../types/db'
+import { Image } from '../types/db'
 const converter = <T>() => ({
     toFirestore: (data: Partial<T>) => data,
     fromFirestore: (snap: FirebaseFirestore.QueryDocumentSnapshot) =>
@@ -23,16 +23,57 @@ const getBuilder = async (id: string): Promise<Builder | undefined> => {
     return builder.data()
 }
 
-const getBuild = async (id: string): Promise<Build | undefined> => {
-    return await (await dataPoint<Build>('builds').doc(id).get()).data()
+const getBuild = async (id?: string | string[]): Promise<Build | undefined> => {
+    if (typeof id === 'string') {
+        const res = await dataPoint<Build>('builds').doc(id).get()
+        const data = await res?.data()
+        const buildId = res?.id
+        if (data && id) {
+            return { ...data, id: buildId }
+        }
+    }
 }
 
+const getBuilds = async (): Promise<Build[]> => {
+    const data: Build[] = []
+    await (
+        await dataPoint<Build>('builds').get()
+    ).forEach((build) => data.push({ ...build.data(), id: build.id }))
+    return data
+}
+
+const getUserBuilds = async (id: string): Promise<Build[]> => {
+    const data: Build[] = []
+    await (
+        await dataPoint<Build>('builds').where('userId', '==', id).get()
+    ).forEach((build) => data.push({ ...build.data(), id: build.id }))
+    return data
+}
+
+const getImageSet = async (): Promise<Image[]> => {
+    const data: Image[] = []
+    await (
+        await dataPoint<Build>('builds')
+            .where('images', '!=', false)
+            .limit(7)
+            .get()
+    ).forEach((build) => {
+        const images = build.data().images
+        if (images) {
+            data.push(...images)
+        }
+    })
+
+    return data
+}
 const db = {
-    builds: dataPoint<Build>('builds'),
+    userBuilds: getUserBuilds,
     builders: dataPoint<Builder>('builders'),
     getUser,
     getBuilder,
     getBuild,
+    getBuilds,
+    getImageSet,
 }
 
 export { db }

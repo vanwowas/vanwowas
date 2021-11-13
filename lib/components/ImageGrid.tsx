@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { ReactNode, Fragment } from 'react'
+import React from 'react'
 import styled, { css } from 'styled-components'
 import { upToBreakpoint } from '../style/breakpoints'
 import colors from '../style/colors'
 import { stack } from '../style/mixins'
 import Image from './Image'
+import { Image as ImageType } from '../types/db'
+import TextArea from './TextArea'
+import { AddButton } from './AddButton'
 
 const Container = styled.div`
     ${stack('1rem', 'y')}
@@ -100,45 +103,48 @@ const ImageOverlay = styled.div`
 `
 
 type Props = {
-    images: (string | ReactNode)[]
-    unoptimized?: boolean
+    images: ImageType[]
     mobileStyle?: MobileStyle
-    imageChildren?: ReactNode
+    editable?: boolean
 }
 
 type MobileStyle = 'fullWidth' | 'grid'
 
 const ImageGrid: React.FC<Props> = ({
     images,
-    unoptimized = false,
     mobileStyle = 'grid',
-    imageChildren,
+    editable = false,
 }) => {
     return (
         <Container>
             <Grid mobileStyle={mobileStyle}>
-                {images.map((img, i) =>
-                    typeof img === 'string' ? (
-                        <ImageContainer key={img}>
-                            <Image
-                                onClick={(e) => e.stopPropagation()}
-                                alt=""
-                                layout="fill"
-                                objectFit="cover"
-                                src={img}
-                                unoptimized={unoptimized}
-                            />
-                            {imageChildren && (
-                                <ImageOverlay
-                                    onClick={(ev) => ev.stopPropagation()}
-                                >
-                                    {imageChildren}
-                                </ImageOverlay>
-                            )}
-                        </ImageContainer>
-                    ) : (
-                        <Fragment key={i}>{img}</Fragment>
-                    )
+                {images.map((img) => (
+                    <ImageContainer key={img.url}>
+                        <Image
+                            onClick={(e) => e.stopPropagation()}
+                            alt=""
+                            layout="fill"
+                            objectFit="cover"
+                            src={img.url}
+                            unoptimized={img.url.includes('blob')}
+                        />
+                        {editable && (
+                            <ImageOverlay
+                                onClick={(ev) => ev.stopPropagation()}
+                            >
+                                <TextArea
+                                    defaultValue={img.description ?? undefined}
+                                />
+                            </ImageOverlay>
+                        )}
+                    </ImageContainer>
+                ))}
+                {images.length < 7 && editable && (
+                    <AddButton
+                        backgroundColor="secondary"
+                        borderColor="dark"
+                        color="light"
+                    />
                 )}
             </Grid>
         </Container>

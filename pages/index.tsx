@@ -7,8 +7,6 @@ import { upToBreakpoint } from '../lib/style/breakpoints'
 import Image, { ImageContainer } from '../lib/components/Image'
 import colors from '../lib/style/colors'
 import {
-    AuthAction,
-    getFirebaseAdmin,
     useAuthUser,
     withAuthUser,
     withAuthUserTokenSSR,
@@ -17,10 +15,11 @@ import Page from '../lib/components/Page'
 import BuildCard from '../lib/components/BuildCard'
 import FindManufactur from '../lib/components/FindManufactur'
 import ImageGrid from '../lib/components/ImageGrid'
+import { Image as ImageType } from '../lib/types/db'
 import { Headline1 } from '../lib/style/typography'
 import { LinkButton } from '../lib/components/Button'
 import { Build } from '../lib/types/db'
-import { firestore } from 'firebase-admin'
+import db from '../lib/db'
 
 const Stage = styled.div`
     position: absolute;
@@ -68,9 +67,10 @@ const StyledLinkButton = styled(LinkButton)`
 
 type Props = {
     builds: Build[]
+    images: ImageType[]
 }
 
-const IndexPage: React.FC<Props> = ({ builds }) => {
+const IndexPage: React.FC<Props> = ({ builds, images }) => {
     const AuthUser = useAuthUser()
     return (
         <Page user={AuthUser} withPadding>
@@ -129,17 +129,7 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                 </ImageWithText>
                 <div>
                     <Headline1>inspiration</Headline1>
-                    <ImageGrid
-                        images={[
-                            'https://images.unsplash.com/photo-1592151450113-bdf5982da169?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80',
-                            'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1908&q=80',
-                            'https://images.unsplash.com/photo-1569850402748-11f762e9be07?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80',
-                            'https://images.unsplash.com/photo-1506057278219-795838d4c2dd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
-                            'https://images.unsplash.com/photo-1521973289773-1d99478a9973?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2378&q=80',
-                            'https://images.unsplash.com/photo-1486330071120-ba4e79e49431?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1955&q=80',
-                            'https://images.unsplash.com/photo-1512075735503-c265d3d40579?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1953&q=80',
-                        ]}
-                    />
+                    <ImageGrid images={images} />
                     <StyledLinkButton
                         backgroundColor="primary"
                         borderColor="dark"
@@ -150,26 +140,19 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                     </StyledLinkButton>
                 </div>
                 <FindManufactur />
-                {builds.map((b, i) => (
-                    <BuildCard key={i} build={b} />
+                {builds.map((b) => (
+                    <BuildCard key={b.id} build={b} />
                 ))}
             </Content>
         </Page>
     )
 }
 
-export const getServerSideProps = withAuthUserTokenSSR({
-    whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async () => {
-    const db = getFirebaseAdmin().firestore()
-    const builds = db.collection('builds').limit(10)
-
-    const querySnapshot = await builds.get<Build>()
-
-    const bf: Build[] = []
-    querySnapshot.forEach((b) => bf.push({ ...b.data(), id: b.id } as Build))
+export const getServerSideProps = withAuthUserTokenSSR()(async () => {
+    const builds = await db.getBuilds()
+    const images = await db.getImageSet()
     return {
-        props: { builds: bf },
+        props: { builds, images },
     }
 })
 export default withAuthUser<Props>()(IndexPage)
