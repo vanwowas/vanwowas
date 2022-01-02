@@ -7,6 +7,9 @@ const tertiary = '#85CA93'
 const grey = '#b9b9b9'
 
 const colors = {
+    secondary,
+    grey,
+    lightGrey,
     pageBackground: lightGrey,
     headerBackground: white,
     footerBackground: white,

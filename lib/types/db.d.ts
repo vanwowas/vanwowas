@@ -26,6 +26,7 @@ export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 export type User = {
     name: string
     isBuilder: boolean
+    favorites?: string[]
 }
 
 export type Builds = FirebaseFirestore.QueryDocumentSnapshot<Build>[]

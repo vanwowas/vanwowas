@@ -54,7 +54,9 @@ const Signup: React.FC = () => {
                 })
 
                 router.push('/user')
-            } catch {}
+            } catch (e) {
+                console.log(e)
+            }
         },
         [router]
     )

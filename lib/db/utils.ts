@@ -9,6 +9,7 @@ export const createUser = async (
     const user = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
+    console.log(user)
 
     await firebase
         .firestore()

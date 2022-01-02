@@ -6,7 +6,7 @@ import { Headline2, Paragraph } from '../style/typography'
 import Image from './Image'
 // import Cheap from '../style/icons/cheap.svg'
 // import MapPin from '../style/icons/map-pin.svg'
-import { upToBreakpoint } from '../style/breakpoints'
+import { upFromBreakpoint, upToBreakpoint } from '../style/breakpoints'
 // import { LinkButton } from './Button'
 import { Build } from '../types/db'
 import { LinkButton } from './Button'
@@ -31,10 +31,31 @@ const InfoContainer = styled.div`
     svg {
         width: 2rem;
     }
+    ${Paragraph} {
+        overflow: hidden;
+        position: relative;
+
+        ::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5rem;
+            background: linear-gradient(
+                0deg,
+                rgba(255, 255, 255, 1) 0%,
+                transparent 100%
+            );
+        }
+    }
 `
 
 const Container = styled.div`
     display: flex;
+    ${upFromBreakpoint('medium')} {
+        max-height: 400px;
+    }
     ${upToBreakpoint('medium')} {
         flex-direction: column;
         ${ImageContainer} {
@@ -48,6 +69,7 @@ const Container = styled.div`
             padding: 2rem;
             margin-left: 0;
             border-radius: 1rem;
+            max-height: 300px;
         }
     }
 `
@@ -71,6 +93,17 @@ const RoundButton = styled(LinkButton)`
         height: 1.5rem;
         width: 1.5rem;
     }
+    ${upToBreakpoint('medium')} {
+        bottom: -2rem;
+        top: auto;
+        right: 10%;
+    }
+`
+
+const SeeMore = styled(LinkButton)`
+    position: absolute;
+    bottom: -2rem;
+    right: 20%;
     ${upToBreakpoint('medium')} {
         bottom: -2rem;
         top: auto;
@@ -105,19 +138,29 @@ const BuildCard: React.FC<Props> = ({ build, editable }) => {
             <InfoContainer>
                 <Headline2>{title}</Headline2>
                 <Paragraph>{description}</Paragraph>
-
-                <List>
+                {/* <List>
                     {['bulletPoints', 'FS'].map((b) => (
                         <li key={b}>
                             <Paragraph>{b}</Paragraph>
                         </li>
                     ))}
-                </List>
+                </List> */}
                 {/* <IconContainer>
                     {['cheap', 'nearby'].map((p: any) => (
                         <React.Fragment key={p}>{icons[p]}</React.Fragment>
                     ))}
                 </IconContainer> */}
+                {!editable && (
+                    <Link href={`/build/${build.id}`} passHref>
+                        <SeeMore
+                            backgroundColor="secondary"
+                            color="light"
+                            borderColor="dark"
+                        >
+                            see more
+                        </SeeMore>
+                    </Link>
+                )}
                 {editable && (
                     <Link href={`/builder/build/text/${build.id}`} passHref>
                         <RoundButton

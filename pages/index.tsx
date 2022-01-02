@@ -65,6 +65,19 @@ const StyledLinkButton = styled(LinkButton)`
     margin-right: auto;
 `
 
+const HeaderImage = styled(Image)`
+    ::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: ${colors.secondary};
+        opacity: 0.19;
+    }
+`
+
 type Props = {
     builds: Build[]
     images: ImageType[]
@@ -75,11 +88,11 @@ const IndexPage: React.FC<Props> = ({ builds, images }) => {
     return (
         <Page user={AuthUser} withPadding>
             <Stage>
-                <Image
+                <HeaderImage
                     alt=""
                     objectFit="cover"
                     layout="fill"
-                    src="https://images.unsplash.com/photo-1515876305430-f06edab8282a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80"
+                    src="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/stage.JPG?alt=media"
                 />
             </Stage>
             <Content>
