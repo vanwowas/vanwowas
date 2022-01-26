@@ -42,11 +42,16 @@ const AddImages: React.FC<Props> = ({ build }) => {
                     url,
                     description: image.description || null,
                 })
+            } else {
+                snapshots.push({
+                    url: image.url,
+                    description: image.description || null,
+                })
             }
         }
         await updateBuild({
             ...build,
-            images: [...(build.images ?? []), ...snapshots],
+            images: [...snapshots],
         })
         router.push('/builder/builds')
     }, [build, images, router])
@@ -54,7 +59,7 @@ const AddImages: React.FC<Props> = ({ build }) => {
     return (
         <StyledPage user={AuthUser} withPadding>
             <Headline1>Füge hier Fotos hinzu</Headline1>
-            <ImageDrop defaultImages={build.images} onDrop={setImages} />
+            <ImageDrop defaultImages={build.images} onChange={setImages} />
             <div>
                 <Button
                     color="dark"
@@ -71,8 +76,8 @@ const AddImages: React.FC<Props> = ({ build }) => {
 export const getServerSideProps = withAuthUserTokenSSR({
     whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ params, AuthUser }) => {
-    if (AuthUser.id) {
-        const build = await db.getBuild(params?.id?.toString())
+    if (AuthUser.id && params?.id) {
+        const build = await db.getBuild(params.id.toString())
         if (build?.userId === AuthUser.id) {
             return {
                 props: {

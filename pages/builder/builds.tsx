@@ -40,7 +40,9 @@ const AddBuild: React.FC<Props> = ({ builds }) => {
 
     return (
         <StyledPage user={AuthUser} withPadding>
-            <Headline1>Hier siehts du deine Ausbau-Konzepte</Headline1>
+            <Headline1>
+                Hier kannst Du deine Konzepte bearbeiten oder Neue erstellen
+            </Headline1>
             <Link passHref href="/builder/build/text">
                 <AddLinkButton
                     borderColor="dark"

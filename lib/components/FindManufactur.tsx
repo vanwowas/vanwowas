@@ -31,10 +31,10 @@ const InputWrapper = styled.div`
 const FindManufactur: React.FC = () => {
     return (
         <Container>
-            <Headline1>manufaktur finden</Headline1>
+            <Headline1>Manufaktur finden</Headline1>
             <InputWrapper>
-                <Input placeholder="budget €" />
-                <Input placeholder="standort" />
+                <Input placeholder="Budget €" />
+                <Input placeholder="Standort PLZ" />
             </InputWrapper>
         </Container>
     )

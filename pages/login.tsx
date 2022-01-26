@@ -48,7 +48,7 @@ const Login: React.FC = () => {
                         email.value,
                         password.value
                     )
-                    router.push('/')
+                    router.push('/user')
                 }
             } catch (error) {
                 return new Error('something went wrong 🔥')
@@ -61,9 +61,14 @@ const Login: React.FC = () => {
         <Page user={AuthUser} withPadding>
             <Form onSubmit={login}>
                 <Headline1>LOGIN</Headline1>
-                <Input placeholder="email" name="email" type="email" required />
                 <Input
-                    placeholder="password"
+                    placeholder="E-Mail"
+                    name="email"
+                    type="email"
+                    required
+                />
+                <Input
+                    placeholder="Passwort"
                     name="password"
                     type="password"
                     required
@@ -77,7 +82,8 @@ const Login: React.FC = () => {
                 >
                     login
                 </Button>
-                <Link href="/reset">forgot your password?</Link>
+                <Link href="/signup">Noch keinen Account?</Link>
+                <Link href="/reset">Passwort vergessen?</Link>
             </Form>
         </Page>
     )

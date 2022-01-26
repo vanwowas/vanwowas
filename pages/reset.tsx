@@ -52,10 +52,11 @@ const Reset: React.FC = () => {
                 {!finished ? (
                     <>
                         <Headline1>
-                            Enter your E-Mail to reset the password
+                            Gib deine E-Mail ein, um dein Passwort
+                            zurückzusetzen
                         </Headline1>
                         <Input
-                            placeholder="email"
+                            placeholder="E-Mail"
                             name="email"
                             type="email"
                             required
@@ -67,7 +68,7 @@ const Reset: React.FC = () => {
                             borderColor="dark"
                             color="dark"
                         >
-                            reset
+                            zurücksetzen
                         </Button>
                     </>
                 ) : (

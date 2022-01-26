@@ -9,7 +9,11 @@ const grey = '#b9b9b9'
 const colors = {
     secondary,
     grey,
+    tertiary,
     lightGrey,
+    primary,
+    white,
+
     pageBackground: lightGrey,
     headerBackground: white,
     footerBackground: white,
@@ -48,3 +52,16 @@ const colors = {
 }
 
 export default colors
+
+type RGB = [number, number, number]
+
+export const hexToRgb = (hex: string): RGB => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    return result
+        ? [
+              parseInt(result[1], 16),
+              parseInt(result[2], 16),
+              parseInt(result[3], 16),
+          ]
+        : [0, 0, 0]
+}

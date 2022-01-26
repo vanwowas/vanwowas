@@ -35,23 +35,28 @@ const StyledLinkButton = styled(LinkButton)`
     top: calc(100% - 1rem);
     right: 1rem;
     z-index: 2;
+    width: 115px;
+    text-align: center;
 `
 type Props = {
     headline: string
     description: string
     href: LinkProps['href']
+    cta: string
+    image: string
 }
 
-const TeaserCard: React.FC<Props> = ({ headline, description, href }) => {
+const TeaserCard: React.FC<Props> = ({
+    headline,
+    description,
+    href,
+    cta,
+    image,
+}) => {
     return (
         <Container>
             <ImageContainer>
-                <Image
-                    alt=""
-                    objectFit="cover"
-                    layout="fill"
-                    src="https://images.unsplash.com/photo-1527786356703-4b100091cd2c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1867&q=80"
-                />
+                <Image alt="" objectFit="cover" layout="fill" src={image} />
             </ImageContainer>
             <Info>
                 <Headline2>{headline}</Headline2>
@@ -63,7 +68,7 @@ const TeaserCard: React.FC<Props> = ({ headline, description, href }) => {
                     borderColor="dark"
                     color="light"
                 >
-                    see more
+                    {cta}
                 </StyledLinkButton>
             </Link>
         </Container>

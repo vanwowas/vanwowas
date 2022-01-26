@@ -14,38 +14,29 @@ import {
 import Page from '../lib/components/Page'
 import BuildCard from '../lib/components/BuildCard'
 import FindManufactur from '../lib/components/FindManufactur'
-import ImageGrid from '../lib/components/ImageGrid'
 import { Image as ImageType } from '../lib/types/db'
 import { Headline1 } from '../lib/style/typography'
-import { LinkButton } from '../lib/components/Button'
 import { Build } from '../lib/types/db'
 import db from '../lib/db'
-
-const Stage = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 75vh;
-`
+import PageImageStage from '../lib/components/PageImageStage'
 
 const Content = styled.div`
     ${stack('5rem', 'y')}
     ${Headline1} {
         color: ${colors.textColor.secondary};
     }
-`
-
-const StyledIntroText = styled(IntroText)`
     margin-top: calc(75vh + 5rem);
-    margin-bottom: 2rem;
 `
 
 const CardContainer = styled.div`
     padding: 1rem 0;
-    ${stack('2rem', 'x')}
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 2rem;
     ${upToBreakpoint('medium')} {
-        ${stack('4rem', 'y')}
+        grid-template-columns: 1fr;
+        grid-template-row: 1fr 1fr 1fr;
+        grid-gap: 4rem;
     }
 `
 
@@ -60,22 +51,12 @@ const ImageWithText = styled.div`
     }
 `
 
-const StyledLinkButton = styled(LinkButton)`
-    margin-left: auto;
-    margin-right: auto;
-`
+const StageHeadlineContainer = styled.div``
 
-const HeaderImage = styled(Image)`
-    ::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: ${colors.secondary};
-        opacity: 0.19;
-    }
+const StageHeadline = styled(Headline1)<{ color: string }>`
+    font-size: 2.5rem;
+    margin-bottom: 0rem;
+    color: ${(p) => p.color};
 `
 
 type Props = {
@@ -83,48 +64,59 @@ type Props = {
     images: ImageType[]
 }
 
-const IndexPage: React.FC<Props> = ({ builds, images }) => {
+const IndexPage: React.FC<Props> = ({ builds }) => {
     const AuthUser = useAuthUser()
     return (
         <Page user={AuthUser} withPadding>
-            <Stage>
-                <HeaderImage
-                    alt=""
-                    objectFit="cover"
-                    layout="fill"
-                    src="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/stage.JPG?alt=media"
-                />
-            </Stage>
+            <PageImageStage
+                headline={
+                    <StageHeadlineContainer>
+                        <StageHeadline color={colors.primary}>
+                            Traumcamper
+                        </StageHeadline>
+                        <StageHeadline color={colors.secondary}>
+                            bauen
+                        </StageHeadline>
+                        <StageHeadline color={colors.tertiary}>
+                            lassen
+                        </StageHeadline>
+                    </StageHeadlineContainer>
+                }
+                url={
+                    'https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/stage.JPG?alt=media'
+                }
+            />
             <Content>
-                <StyledIntroText
-                    fullWidth
-                    headline="Lorem Ipsum"
-                    text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                />
                 <CardContainer>
                     <TeaserCard
+                        cta="finden"
+                        image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/manufaktur.JPG?alt=media"
                         href={{
                             pathname: '/category/[slug]',
                             query: { slug: 'basic' },
                         }}
-                        headline="basic"
-                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,"
+                        headline="Manufaktur finden"
+                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat."
                     />
                     <TeaserCard
+                        cta="inspiration"
+                        image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/inspiration.jpg?alt=media"
                         href={{
                             pathname: '/category/[slug]',
                             query: { slug: 'comfort' },
                         }}
-                        headline="comfort"
-                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,"
+                        headline="Inspirieren lassen"
+                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
                     />
                     <TeaserCard
+                        cta="blog"
+                        image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/DSCF9738-min.JPG?alt=media"
                         href={{
                             pathname: '/category/[slug]',
                             query: { slug: 'premium' },
                         }}
-                        headline="premium"
-                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,"
+                        headline="Rund um's campen"
+                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
                     />
                 </CardContainer>
                 <ImageWithText>
@@ -137,21 +129,9 @@ const IndexPage: React.FC<Props> = ({ builds, images }) => {
                         alt=""
                         layout="fill"
                         objectFit="cover"
-                        src="https://images.unsplash.com/photo-1509721926668-25a8dd274c1b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80"
+                        src="https://images.unsplash.com/photo-1524556079002-ba22995b7af7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1364&q=80"
                     />
                 </ImageWithText>
-                <div>
-                    <Headline1>inspiration</Headline1>
-                    <ImageGrid images={images} />
-                    <StyledLinkButton
-                        backgroundColor="primary"
-                        borderColor="dark"
-                        color="dark"
-                        href="/inspiration"
-                    >
-                        see more
-                    </StyledLinkButton>
-                </div>
                 <FindManufactur />
                 {builds.map((b) => (
                     <BuildCard key={b.id} build={b} />

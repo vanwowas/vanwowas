@@ -20,10 +20,12 @@ const StyledQuill = styled(ReactQuill)`
     .ql-toolbar {
         border: 2px solid black;
         border-radius: 0.5rem 0.5rem 0 0;
+        height: 44px;
     }
     .ql-container {
         border: 2px solid black;
         border-radius: 0 0 0.5rem 0.5rem;
+        height: calc(100% - 44px);
     }
 `
 type Props = {
@@ -42,17 +44,12 @@ const Editor: React.FC<Props> = ({ onChange, value, className }) => {
                 modules={{
                     toolbar: [
                         [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline', 'blockquote'],
-                        [
-                            { list: 'ordered' },
-                            { list: 'bullet' },
-                            { indent: '-1' },
-                            { indent: '+1' },
-                        ],
+                        ['bold', 'italic', 'underline'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
                         ['link'],
                     ],
                 }}
-            />{' '}
+            />
         </Placeholder>
     )
 }

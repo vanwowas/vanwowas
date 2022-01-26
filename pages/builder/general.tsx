@@ -54,21 +54,26 @@ const General: React.FC<Props> = ({ user, builder }) => {
     const AuthUser = useAuthUser()
     const router = useRouter()
     const { name } = user
+
     const submit = useCallback(
         async (event: HTMLFormEvent) => {
             event.preventDefault()
             const { name, about, zip, phone } = event.target
-            if (!AuthUser.id) return
+            if (!AuthUser.id || !AuthUser.email) return
             await updateUser(AuthUser.id, { name: name.value, isBuilder: true })
+
             await createBuilder(AuthUser.id, {
                 description: about.value,
                 phone: phone.value,
                 zip: zip.value,
+                name: name.value,
+                email: AuthUser.email,
             })
             router.push('/builder/builds')
         },
-        [AuthUser.id, router]
+        [AuthUser.email, AuthUser.id, router]
     )
+
     return (
         <Page user={AuthUser} withPadding>
             <Form onSubmit={submit}>

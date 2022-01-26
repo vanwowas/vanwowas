@@ -9,7 +9,6 @@ export const createUser = async (
     const user = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-    console.log(user)
 
     await firebase
         .firestore()
@@ -24,6 +23,17 @@ export const updateUser = async (id: string, data: User): Promise<void> => {
         .collection('users')
         .doc(id)
         .set(data, { merge: true })
+}
+
+export const addFavorite = async (
+    id: string,
+    favorite: string
+): Promise<void> => {
+    await firebase
+        .firestore()
+        .collection('users')
+        .doc(id)
+        .update('favorites', firebase.firestore.FieldValue.arrayUnion(favorite))
 }
 
 export const createBuilder = async (

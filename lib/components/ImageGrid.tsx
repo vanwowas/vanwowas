@@ -1,13 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { upToBreakpoint } from '../style/breakpoints'
-import colors from '../style/colors'
 import { stack } from '../style/mixins'
 import Image from './Image'
 import { Image as ImageType } from '../types/db'
-import TextArea from './TextArea'
-import { AddButton } from './AddButton'
 
 const Container = styled.div`
     ${stack('1rem', 'y')}
@@ -27,19 +23,19 @@ const Grid = styled.div<{ mobileStyle: MobileStyle }>`
         grid-area: 1 / 1 / 3 / 3;
     }
     & > :nth-child(2n) {
-        grid-area: 3 / 1 / 4 / 2;
+        grid-area: 1 / 3 / 2 / 4;
     }
     & > :nth-child(3n) {
-        grid-area: 3 / 2 / 4 / 3;
+        grid-area: 1 / 4 / 3 / 5;
     }
     & > :nth-child(4n) {
         grid-area: 2 / 3 / 4 / 4;
     }
     & > :nth-child(5n) {
-        grid-area: 1 / 3 / 2 / 4;
+        grid-area: 3 / 2 / 4 / 3;
     }
     & > :nth-child(6n) {
-        grid-area: 1 / 4 / 3 / 5;
+        grid-area: 3 / 1 / 4 / 2;
     }
     & > :nth-child(7n) {
         grid-area: 3 / 4 / 4 / 5;
@@ -85,27 +81,12 @@ const ImageContainer = styled.div`
     position: relative;
 `
 
-const ImageOverlay = styled.div`
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-    background-color: ${colors.buttonBackground.primary};
-    opacity: 0.75;
-    padding: 1rem;
-    align-items: flex-end;
-    border-radius: 8px;
-    * {
-        max-width: 100%;
-        min-width: 100%;
-        flex: 1 0 auto;
-    }
-`
-
 type Props = {
     images: ImageType[]
     mobileStyle?: MobileStyle
     editable?: boolean
+    onImageChange?: (images: ImageType[]) => void
+    className?: string
 }
 
 type MobileStyle = 'fullWidth' | 'grid'
@@ -113,10 +94,10 @@ type MobileStyle = 'fullWidth' | 'grid'
 const ImageGrid: React.FC<Props> = ({
     images,
     mobileStyle = 'grid',
-    editable = false,
+    className,
 }) => {
     return (
-        <Container>
+        <Container className={className}>
             <Grid mobileStyle={mobileStyle}>
                 {images.map((img) => (
                     <ImageContainer key={img.url}>
@@ -126,26 +107,9 @@ const ImageGrid: React.FC<Props> = ({
                             layout="fill"
                             objectFit="cover"
                             src={img.url}
-                            unoptimized={img.url.includes('blob')}
                         />
-                        {editable && (
-                            <ImageOverlay
-                                onClick={(ev) => ev.stopPropagation()}
-                            >
-                                <TextArea
-                                    defaultValue={img.description ?? undefined}
-                                />
-                            </ImageOverlay>
-                        )}
                     </ImageContainer>
                 ))}
-                {images.length < 7 && editable && (
-                    <AddButton
-                        backgroundColor="secondary"
-                        borderColor="dark"
-                        color="light"
-                    />
-                )}
             </Grid>
         </Container>
     )

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { stack } from '../lib/style/mixins'
 import Button from '../lib/components/Button'
 import Input from '../lib/components/Input'
-import { Headline1 } from '../lib/style/typography'
+import { Headline1, Paragraph } from '../lib/style/typography'
 import Page from '../lib/components/Page'
 import {
     AuthAction,
@@ -64,11 +64,19 @@ const Signup: React.FC = () => {
     return (
         <Page user={AuthUser} withPadding>
             <Form onSubmit={signup}>
-                <Headline1>SIGN UP</Headline1>
-                <Input placeholder="name" name="name" type="text" required />
-                <Input placeholder="email" name="email" type="email" required />
+                <Headline1>Account erstellen</Headline1>
+                <Paragraph>
+                    Später kannst Du dein Profil zu einer Manufaktur erweitern
+                </Paragraph>
+                <Input placeholder="Name" name="name" type="text" required />
                 <Input
-                    placeholder="password"
+                    placeholder="E-Mail"
+                    name="email"
+                    type="email"
+                    required
+                />
+                <Input
+                    placeholder="Passwort"
                     name="password"
                     type="password"
                     required
@@ -80,9 +88,9 @@ const Signup: React.FC = () => {
                     borderColor="dark"
                     color="dark"
                 >
-                    sign up
+                    registrieren
                 </Button>
-                <Link href="/login">already have an account?</Link>
+                <Link href="/login">Du hast schon einen Account?</Link>
             </Form>
         </Page>
     )

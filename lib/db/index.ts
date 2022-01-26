@@ -23,14 +23,12 @@ const getBuilder = async (id: string): Promise<Builder | undefined> => {
     return builder.data()
 }
 
-const getBuild = async (id?: string | string[]): Promise<Build | undefined> => {
-    if (typeof id === 'string') {
-        const res = await dataPoint<Build>('builds').doc(id).get()
-        const data = await res?.data()
-        const buildId = res?.id
-        if (data && id) {
-            return { ...data, id: buildId }
-        }
+const getBuild = async (id: string): Promise<Build | undefined> => {
+    const res = await dataPoint<Build>('builds').doc(id).get()
+    const data = await res?.data()
+    const buildId = res?.id
+    if (data) {
+        return { ...data, id: buildId }
     }
 }
 
@@ -39,6 +37,23 @@ const getBuilds = async (): Promise<Build[]> => {
     await (
         await dataPoint<Build>('builds').get()
     ).forEach((build) => data.push({ ...build.data(), id: build.id }))
+    return data
+}
+
+const getBuilderBuilds = async (builderId: string): Promise<Build[]> => {
+    const data: Build[] = []
+    await (
+        await dataPoint<Build>('builds').where('userId', '==', builderId).get()
+    ).forEach((build) => data.push({ ...build.data(), id: build.id }))
+    return data
+}
+
+const getUserFavoriteBuilds = async (favorites: string[]): Promise<Build[]> => {
+    const data: Build[] = []
+    favorites.length &&
+        (await (
+            await dataPoint<Build>('builds').where('id', 'in', favorites).get()
+        ).forEach((build) => data.push({ ...build.data(), id: build.id })))
     return data
 }
 
@@ -72,8 +87,10 @@ const db = {
     getUser,
     getBuilder,
     getBuild,
+    getBuilderBuilds,
     getBuilds,
     getImageSet,
+    getUserFavoriteBuilds,
 }
 
 export { db }

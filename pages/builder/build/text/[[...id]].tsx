@@ -120,7 +120,9 @@ export const getServerSideProps = withAuthUserTokenSSR({
     whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ params, AuthUser }) => {
     if (AuthUser.id) {
-        const build = await db.getBuild(params?.id?.toString())
+        const build = params?.id
+            ? await db.getBuild(params?.id?.toString())
+            : null
         return {
             props: {
                 build: build && build.userId === AuthUser.id ? build : null,

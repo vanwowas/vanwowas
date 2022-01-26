@@ -2,16 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 import colors from '../style/colors'
 import { aspectRatio, stack } from '../style/mixins'
-import { Headline2, Paragraph } from '../style/typography'
+import { Headline2 } from '../style/typography'
 import Image from './Image'
-// import Cheap from '../style/icons/cheap.svg'
-// import MapPin from '../style/icons/map-pin.svg'
 import { upFromBreakpoint, upToBreakpoint } from '../style/breakpoints'
-// import { LinkButton } from './Button'
 import { Build } from '../types/db'
 import { LinkButton } from './Button'
 import Link from 'next/link'
 import Edit from '../style/icons/edit.svg'
+import { useRouter } from 'next/dist/client/router'
+import Richtext from './Richtext'
 
 const ImageContainer = styled.div`
     width: 40%;
@@ -31,28 +30,29 @@ const InfoContainer = styled.div`
     svg {
         width: 2rem;
     }
-    ${Paragraph} {
-        overflow: hidden;
-        position: relative;
+`
 
-        ::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 5rem;
-            background: linear-gradient(
-                0deg,
-                rgba(255, 255, 255, 1) 0%,
-                transparent 100%
-            );
-        }
+const StyledRichtext = styled(Richtext)`
+    overflow: hidden;
+    position: relative;
+    ::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 5rem;
+        background: linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 1) 0%,
+            transparent 100%
+        );
     }
 `
 
-const Container = styled.div`
+const Container = styled.div<{ withPointerCursor: boolean }>`
     display: flex;
+    ${(p) => p.withPointerCursor && 'cursor: pointer'};
     ${upFromBreakpoint('medium')} {
         max-height: 400px;
     }
@@ -73,17 +73,6 @@ const Container = styled.div`
         }
     }
 `
-
-const List = styled.ul`
-    list-style-type: disc;
-    list-style-position: outside;
-    margin-left: 1em;
-    ${stack('1em', 'y')}
-`
-
-// const IconContainer = styled.div`
-//     ${stack('1rem', 'x')}
-// `
 
 const RoundButton = styled(LinkButton)`
     position: absolute;
@@ -122,9 +111,18 @@ type Props = {
 }
 
 const BuildCard: React.FC<Props> = ({ build, editable }) => {
-    const { title, description, images } = build
+    const { title, description, images, id } = build
+    const router = useRouter()
+
     return (
-        <Container>
+        <Container
+            withPointerCursor={!editable}
+            onClick={() => {
+                if (!editable) {
+                    router.push(`/build/${id}`)
+                }
+            }}
+        >
             <ImageContainer>
                 {images && (
                     <Image
@@ -137,16 +135,8 @@ const BuildCard: React.FC<Props> = ({ build, editable }) => {
             </ImageContainer>
             <InfoContainer>
                 <Headline2>{title}</Headline2>
-                <Paragraph>{description}</Paragraph>
-                {/* <List>
-                    {['bulletPoints', 'FS'].map((b) => (
-                        <li key={b}>
-                            <Paragraph>{b}</Paragraph>
-                        </li>
-                    ))}
-                </List> */}
-                {/* <IconContainer>
-                    {['cheap', 'nearby'].map((p: any) => (
+                <StyledRichtext text={description} />
+                {/*</InfoContainer>  {['cheap', 'nearby'].map((p: any) => (
                         <React.Fragment key={p}>{icons[p]}</React.Fragment>
                     ))}
                 </IconContainer> */}
@@ -157,7 +147,7 @@ const BuildCard: React.FC<Props> = ({ build, editable }) => {
                             color="light"
                             borderColor="dark"
                         >
-                            see more
+                            mehr dazu
                         </SeeMore>
                     </Link>
                 )}
@@ -173,28 +163,6 @@ const BuildCard: React.FC<Props> = ({ build, editable }) => {
                         </RoundButton>
                     </Link>
                 )}
-                {/* {(onFavoriteClick || editable) && editHref ? (
-                    <Link href={editHref} passHref>
-                        <RoundButton
-                            round
-                            backgroundColor="primary"
-                            color="light"
-                            borderColor="dark"
-                        >
-                            {onFavoriteClick ? <Favorite /> : <Edit />}
-                        </RoundButton>
-                    </Link>
-                ) : (
-                    <RoundButton
-                        round
-                        backgroundColor="primary"
-                        color="light"
-                        borderColor="dark"
-                        onClick={onFavoriteClick}
-                    >
-                        {onFavoriteClick ? <Favorite /> : <Edit />}
-                    </RoundButton>
-                )} */}
             </InfoContainer>
         </Container>
     )

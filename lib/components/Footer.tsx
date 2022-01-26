@@ -26,8 +26,8 @@ const Container = styled.footer`
 const Footer: React.FC = () => {
     return (
         <Container>
-            <Link>Imprint</Link>
-            <Link>Data Privacy</Link>
+            <Link>Impressum</Link>
+            <Link>Datenschutzerklärung</Link>
             <span>© vanwowas 2021</span>
         </Container>
     )

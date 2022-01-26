@@ -8,6 +8,7 @@ export type ButtonProps = {
     color: keyof typeof colors['buttonText']
     shakeHover?: boolean
     round?: boolean
+    onClick?: () => void
 }
 
 const buttonStyle = css<ButtonProps>`
@@ -18,6 +19,7 @@ const buttonStyle = css<ButtonProps>`
     cursor: pointer;
     border-radius: var(--border-radius);
     padding: 0.75rem 1rem;
+    font-weight: 700;
     background-color: transparent;
     color: ${(p) => colors.buttonText[p.color]};
     position: relative;

@@ -1,7 +1,9 @@
 export type Builder = {
     description: string
+    email: string
     zip: string
     phone?: string
+    name: string
     images?: Image[]
 }
 

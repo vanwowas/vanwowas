@@ -1,20 +1,17 @@
 import React, { useCallback, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
-import ImageGrid from './ImageGrid'
 import colors from '../style/colors'
 import { FileDrop } from 'react-file-drop'
-import { arrayChunks } from '../utils/array-chunks'
 import { Image } from '../types/db'
 import { AddButton } from './AddButton'
+import NextImage from 'next/image'
+import TextArea from './TextArea'
 
 const Container = styled.div<{ empty: boolean; isDragActive: boolean }>`
-    min-height: 50vh;
-    transition: transform 300ms;
-    cursor: pointer;
-    img {
-        color: ${colors.buttonBackground.primary};
-    }
-
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1rem;
+    min-height: 40vh;
     input {
         width: 0;
         height: 0;
@@ -36,17 +33,38 @@ const Container = styled.div<{ empty: boolean; isDragActive: boolean }>`
             border-radius: 0.5rem;
         `}
 `
+const ImageContainer = styled.div`
+    aspect-ratio: 1;
+    position: relative;
+    overflow: hidden;
+`
+const ImageOverlay = styled.div`
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    background-color: ${colors.buttonBackground.primary};
+    opacity: 0.75;
+    padding: 1rem;
+    align-items: flex-end;
+    border-radius: 8px;
+    * {
+        max-width: 100%;
+        min-width: 100%;
+        flex: 1 0 auto;
+    }
+`
 
 export type ImageFile = Image & {
-    file: File
+    file?: File
 }
 
 type Props = {
     defaultImages: Image[] | null
-    onDrop: (images: ImageFile[]) => void
+    onChange: (images: ImageFile[]) => void
 }
 
-const ImageDrop: React.FC<Props> = ({ defaultImages, onDrop }) => {
+const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
     const [isDragActive, setIsDragActive] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [images, setImages] = useState<Image[] | null>(defaultImages)
@@ -69,54 +87,59 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onDrop }) => {
                 description: null,
                 url: URL.createObjectURL(f),
             }))
-            onDrop(files)
-            setImages([
-                ...(images ?? []),
-                ...files.map((f) => ({
-                    url: f.url,
-                    description: f.description,
-                })),
-            ])
+            onChange(files)
+            setImages([...(images ?? []), ...files])
             setIsDragActive(false)
         },
-        [images, onDrop]
+        [images, onChange]
     )
 
     const onTargetClick = useCallback(() => {
         fileInputRef.current?.click()
     }, [])
 
-    const grids = arrayChunks<Image>(images ?? [], 7)
     const empty = !images
+
     return (
         <FileDrop
-            onTargetClick={onTargetClick}
             onDragOver={() => handleFrameDrag(true)}
             onDragLeave={() => handleFrameDrag(false)}
             onDrop={handleDrop}
         >
             <Container empty={empty} isDragActive={isDragActive}>
+                {images?.map((img, index) => (
+                    <ImageContainer key={img.url}>
+                        <NextImage
+                            unoptimized={img.url.includes('blob')}
+                            src={img.url}
+                            layout="fill"
+                            objectFit="cover"
+                        />
+                        <ImageOverlay onClick={(ev) => ev.stopPropagation()}>
+                            <TextArea
+                                defaultValue={img.description ?? undefined}
+                                onChange={(e) => {
+                                    const data = images
+                                    data[index].description = e.target.value
+                                    setImages(data)
+                                    onChange && onChange(data)
+                                }}
+                            />
+                        </ImageOverlay>
+                    </ImageContainer>
+                ))}
+                <AddButton
+                    backgroundColor="secondary"
+                    borderColor="dark"
+                    color="light"
+                    onClick={onTargetClick}
+                />
                 <input
                     onChange={handleDrop}
                     ref={fileInputRef}
                     type="file"
                     multiple
                 />
-                {grids.map((imgs, index) => (
-                    <ImageGrid
-                        key={index}
-                        images={imgs}
-                        mobileStyle="fullWidth"
-                        editable
-                    />
-                ))}
-                {empty && (
-                    <AddButton
-                        backgroundColor="secondary"
-                        borderColor="dark"
-                        color="light"
-                    />
-                )}
             </Container>
         </FileDrop>
     )

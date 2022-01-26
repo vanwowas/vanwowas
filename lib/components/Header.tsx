@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import React, { useCallback, useEffect, useRef } from 'react'
-import colors from '../style/colors'
 import Button, { LinkButton } from './Button'
 import Link from './Link'
 import { stack } from '../style/mixins'
@@ -9,6 +8,8 @@ import User from '../style/icons/user.svg'
 import RouterLink from 'next/link'
 import Logo from '../style/icons/logo.svg'
 import { upToBreakpoint } from '../style/breakpoints'
+import colors from '../style/colors'
+import { useRouter } from 'next/dist/client/router'
 
 const Container = styled.header`
     position: sticky;
@@ -26,7 +27,7 @@ const Container = styled.header`
     transform: translateY(0%);
     transition: transform 300ms ease-out;
     svg {
-        width: 2.5rem;
+        width: 2rem;
         margin: 0 auto;
         cursor: pointer;
     }
@@ -57,6 +58,11 @@ const LogoContainer = styled.div`
     }
 `
 
+const StyledLink = styled(Link)<{ isActive: boolean }>`
+    color: ${(p) => p.isActive && colors.primary};
+    font-weight: 700;
+`
+
 type Props = {
     user: AuthUserContext
 }
@@ -64,6 +70,7 @@ type Props = {
 const Header: React.FC<Props> = ({ user }) => {
     const lastScroll = useRef(0)
     const containerRef = useRef<HTMLElement>(null)
+    const router = useRouter()
 
     const handleScroll = useCallback(() => {
         window.requestAnimationFrame(function () {
@@ -88,8 +95,18 @@ const Header: React.FC<Props> = ({ user }) => {
     return (
         <Container ref={containerRef}>
             <LinkContainer>
-                <Link href="/">home</Link>
-                <Link href="/inspiration">inspiration</Link>
+                <StyledLink isActive={router.route === '/'} href="/">
+                    home
+                </StyledLink>
+                <StyledLink
+                    isActive={router.route === '/inspiration'}
+                    href="/inspiration"
+                >
+                    inspiration
+                </StyledLink>
+                <StyledLink isActive={router.route === '/blog'} href="/blog">
+                    blog
+                </StyledLink>
             </LinkContainer>
             <LogoContainer>
                 <Link href="/">
