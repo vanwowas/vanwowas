@@ -48,7 +48,7 @@ const Login: React.FC = () => {
                         email.value,
                         password.value
                     )
-                    router.push('/user')
+                    await router.push('/user')
                 }
             } catch (error) {
                 return new Error('something went wrong 🔥')
