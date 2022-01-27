@@ -6,12 +6,21 @@ import { Image } from '../types/db'
 import { AddButton } from './AddButton'
 import NextImage from 'next/image'
 import TextArea from './TextArea'
+import { upToBreakpoint } from '../style/breakpoints'
+import Delete from '../style/icons/delete.svg'
 
+import Button from '../components/Button'
 const Container = styled.div<{ empty: boolean; isDragActive: boolean }>`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 1rem;
     min-height: 40vh;
+    ${upToBreakpoint('medium')} {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 1rem;
+        min-height: 40vh;
+    }
     input {
         width: 0;
         height: 0;
@@ -54,6 +63,18 @@ const ImageOverlay = styled.div`
         flex: 1 0 auto;
     }
 `
+const RoundButton = styled(Button)`
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1;
+    color: white;
+
+    svg {
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+`
 
 export type ImageFile = Image & {
     file?: File
@@ -87,7 +108,7 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
                 description: null,
                 url: URL.createObjectURL(f),
             }))
-            onChange(files)
+            onChange([...(images ?? []), ...files])
             setImages([...(images ?? []), ...files])
             setIsDragActive(false)
         },
@@ -98,7 +119,7 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
         fileInputRef.current?.click()
     }, [])
 
-    const empty = !images
+    const empty = !images?.length
 
     return (
         <FileDrop
@@ -115,14 +136,30 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
                             layout="fill"
                             objectFit="cover"
                         />
+                        <RoundButton
+                            round
+                            backgroundColor="secondary"
+                            color="light"
+                            borderColor="light"
+                            onClick={async () => {
+                                const data = images.filter(
+                                    (i) => i.url !== img.url
+                                )
+                                console.log(data)
+                                setImages(data)
+                                onChange(data)
+                            }}
+                        >
+                            <Delete />
+                        </RoundButton>
                         <ImageOverlay onClick={(ev) => ev.stopPropagation()}>
                             <TextArea
                                 defaultValue={img.description ?? undefined}
                                 onChange={(e) => {
                                     const data = images
-                                    data[index].description = e.target.value
+                                    images[index].description = e.target.value
                                     setImages(data)
-                                    onChange && onChange(data)
+                                    onChange(data)
                                 }}
                             />
                         </ImageOverlay>

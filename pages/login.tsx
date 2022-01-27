@@ -36,6 +36,9 @@ const Form = styled.form`
 const Login: React.FC = () => {
     const AuthUser = useAuthUser()
     const router = useRouter()
+    if (router.route === '/login' && AuthUser.id) {
+        router.push('/user')
+    }
 
     const login = useCallback(
         async (event: HTMLFormEvent) => {

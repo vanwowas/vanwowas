@@ -43,7 +43,7 @@ const Contacts: React.FC<Props> = ({ className, builder, loggedIn }) => {
                         borderColor="dark"
                         color="light"
                     >
-                        {'oder doch eine E-Mail'}
+                        oder doch eine E-Mail an {email}
                     </LinkButton>
                 </>
             ) : (

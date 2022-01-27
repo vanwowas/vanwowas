@@ -41,9 +41,10 @@ const StyledLinkButton = styled(LinkButton)`
 type Props = {
     headline: string
     description: string
-    href: LinkProps['href']
+    href?: LinkProps['href']
     cta: string
     image: string
+    onButtonClick?: () => void
 }
 
 const TeaserCard: React.FC<Props> = ({
@@ -52,6 +53,7 @@ const TeaserCard: React.FC<Props> = ({
     href,
     cta,
     image,
+    onButtonClick,
 }) => {
     return (
         <Container>
@@ -62,15 +64,27 @@ const TeaserCard: React.FC<Props> = ({
                 <Headline2>{headline}</Headline2>
                 <Paragraph>{description}</Paragraph>
             </Info>
-            <Link href={href} passHref>
+            {href && (
+                <Link href={href} passHref>
+                    <StyledLinkButton
+                        backgroundColor="secondary"
+                        borderColor="dark"
+                        color="light"
+                    >
+                        {cta}
+                    </StyledLinkButton>
+                </Link>
+            )}
+            {onButtonClick && (
                 <StyledLinkButton
                     backgroundColor="secondary"
                     borderColor="dark"
                     color="light"
+                    onClick={onButtonClick}
                 >
                     {cta}
                 </StyledLinkButton>
-            </Link>
+            )}
         </Container>
     )
 }

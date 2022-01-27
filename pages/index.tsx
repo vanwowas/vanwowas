@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import IntroText from '../lib/components/IntroText'
 import { aspectRatio, stack } from '../lib/style/mixins'
@@ -19,6 +19,7 @@ import { Headline1 } from '../lib/style/typography'
 import { Build } from '../lib/types/db'
 import db from '../lib/db'
 import PageImageStage from '../lib/components/PageImageStage'
+import Link from 'next/link'
 
 const Content = styled.div`
     ${stack('5rem', 'y')}
@@ -26,6 +27,13 @@ const Content = styled.div`
         color: ${colors.textColor.secondary};
     }
     margin-top: calc(75vh + 5rem);
+    svg {
+        display: block;
+        width: 100%;
+        max-width: 250px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 `
 
 const CardContainer = styled.div`
@@ -66,6 +74,14 @@ type Props = {
 
 const IndexPage: React.FC<Props> = ({ builds }) => {
     const AuthUser = useAuthUser()
+    const findRef = useRef<HTMLDivElement>(null)
+    const goToFind = useCallback(() => {
+        if (!findRef.current) return null
+        const findPosition = findRef.current.getBoundingClientRect().top + 200
+        if (findPosition) {
+            window.scrollTo({ top: findPosition, behavior: 'smooth' })
+        }
+    }, [])
     return (
         <Page user={AuthUser} withPadding>
             <PageImageStage
@@ -91,39 +107,30 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                     <TeaserCard
                         cta="finden"
                         image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/manufaktur.JPG?alt=media"
-                        href={{
-                            pathname: '/category/[slug]',
-                            query: { slug: 'basic' },
-                        }}
+                        onButtonClick={goToFind}
                         headline="Manufaktur finden"
-                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat."
+                        description="Postleitzahl und Budget eingeben und alle passenden Manufakturen werden für dich aufgelistet"
                     />
                     <TeaserCard
                         cta="inspiration"
                         image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/inspiration.jpg?alt=media"
-                        href={{
-                            pathname: '/category/[slug]',
-                            query: { slug: 'comfort' },
-                        }}
+                        href="/inspiration"
                         headline="Inspirieren lassen"
-                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr."
+                        description="Bilder durchstöbern und Inspiration finden. Gefunde Manufakturen als Favoriten in deinem Konto speichern"
                     />
                     <TeaserCard
                         cta="blog"
                         image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/DSCF9738-min.JPG?alt=media"
-                        href={{
-                            pathname: '/category/[slug]',
-                            query: { slug: 'premium' },
-                        }}
+                        href="/blog"
                         headline="Rund um's campen"
-                        description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
+                        description="Wie suche ich den passenden Bus? Welche Manufaktur passt zu mir? Kurze Artikel beantworten Deine Camper-Fragen"
                     />
                 </CardContainer>
                 <ImageWithText>
                     <IntroText
                         fullWidth
-                        headline="lorem ipsum"
-                        text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                        headline="VanWoWas?"
+                        text="In ganz Deutschland Gibt es tolle Manufakturen, die maßgeschneiderte und handgefertigte Camper bauen. Doch versteckt das Internet die einen, eine Manufaktur die dir gefällt ist auf der anderen Seite Deutschlands oder in deiner Nähe aber hat nur Premium-Camper, obwohl du doch nur einen simplen Ausbau suchst…"
                     />
                     <Image
                         alt=""
@@ -132,7 +139,29 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                         src="https://images.unsplash.com/photo-1524556079002-ba22995b7af7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1364&q=80"
                     />
                 </ImageWithText>
+                <p>
+                    Auf VanWoWas sammeln wir sie alle und Bringen Dich und deine
+                    perfekt pasenden Ausbauer:innen zusammen. Am besten, Du
+                    richtest dir mit drei clicks deinen{' '}
+                    <Link href={'/login'}>privaten Vanwowas-Bereich</Link> ein
+                    und legst los, dir Inspirierende Bilder, Ausbaukonzepte und
+                    Manufakturen, die für dich infrage kommen, zu merken. Aus
+                    deinem Profil heraus hast du dann Zugang zu den Kontaktdaten
+                    und kannst ganz entspannt deine Favoriten kontaktieren.
+                    <br />
+                    <br />
+                    Wir hoffen dir einen guten Überblick für den Start in dein
+                    Camper-Abenteuer mitzugeben! Wir sind noch nicht perfekt.
+                    Darum freuen wir uns, wenn du hier deine{' '}
+                    <Link href={'mailto:moin@vanwowas.de'}>
+                        Verbesserungsideen mit uns teilst.
+                    </Link>{' '}
+                    Nützliches, spaßiges und Tipps zum Camperkauf und Ausbau --
+                    Checkt gern unsere Newsletter.
+                </p>
+
                 <FindManufactur />
+                <div ref={findRef} />
                 {builds.map((b) => (
                     <BuildCard key={b.id} build={b} />
                 ))}

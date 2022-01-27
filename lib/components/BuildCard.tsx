@@ -35,6 +35,7 @@ const InfoContainer = styled.div`
 const StyledRichtext = styled(Richtext)`
     overflow: hidden;
     position: relative;
+    height: 100%;
     ::after {
         content: '';
         position: absolute;
@@ -100,11 +101,6 @@ const SeeMore = styled(LinkButton)`
     }
 `
 
-// const icons = {
-//     cheap: <Cheap />,
-//     nearby: <MapPin />,
-// }
-
 type Props = {
     build: Build
     editable?: boolean
@@ -124,7 +120,7 @@ const BuildCard: React.FC<Props> = ({ build, editable }) => {
             }}
         >
             <ImageContainer>
-                {images && (
+                {!!images?.length && (
                     <Image
                         src={images[0].url}
                         alt="infocardimage"

@@ -49,6 +49,10 @@ const AddImages: React.FC<Props> = ({ build }) => {
                 })
             }
         }
+        console.log({
+            ...build,
+            images: [...snapshots],
+        })
         await updateBuild({
             ...build,
             images: [...snapshots],
