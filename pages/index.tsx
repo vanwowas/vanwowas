@@ -108,6 +108,7 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                         cta="finden"
                         image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/manufaktur.JPG?alt=media"
                         onButtonClick={goToFind}
+                        href="/"
                         headline="Manufaktur finden"
                         description="Postleitzahl und Budget eingeben und alle passenden Manufakturen werden für dich aufgelistet"
                     />
@@ -120,7 +121,7 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                     />
                     <TeaserCard
                         cta="blog"
-                        image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/DSCF9738-min.JPG?alt=media"
+                        image="/action.jpg"
                         href="/blog"
                         headline="Rund um's campen"
                         description="Wie suche ich den passenden Bus? Welche Manufaktur passt zu mir? Kurze Artikel beantworten Deine Camper-Fragen"
