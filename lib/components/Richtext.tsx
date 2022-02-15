@@ -9,7 +9,7 @@ const Container = styled.div`
         ${typoStyle.h2}
     }
     p {
-        ${typoStyle.body1}
+        ${typoStyle.bodym}
     }
 `
 
