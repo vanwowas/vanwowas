@@ -8,7 +8,7 @@ const TextArea = styled.textarea`
     border: 2px solid black;
     outline: none;
     appearance: none;
-    font-size: ${fontSize.bodym};
+    font-size: ${fontSize.bodyM};
     font-weight: 700;
     ::-webkit-input-placeholder {
         color: ${colors.textColor.primary};
