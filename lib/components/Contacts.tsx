@@ -21,7 +21,7 @@ type Props = {
 }
 
 const Contacts: React.FC<Props> = ({ className, builder, loggedIn }) => {
-    const { phone, email } = builder
+    const { phone, email, website } = builder
     return (
         <Container className={className}>
             <h2>Kontaktdaten</h2>
@@ -38,12 +38,22 @@ const Contacts: React.FC<Props> = ({ className, builder, loggedIn }) => {
                         </LinkButton>
                     )}
                     <LinkButton
-                        href={`mailto:${email}`}
+                        href={`mailto:${email}?subject=VanWoWas - Ausbauanfrage`}
                         backgroundColor="secondary"
                         borderColor="dark"
                         color="light"
                     >
                         oder doch eine E-Mail an {email}
+                    </LinkButton>
+                    <LinkButton
+                        href={website}
+                        backgroundColor="secondary"
+                        borderColor="dark"
+                        color="light"
+                        target={'_blank'}
+                    >
+                        Hier die Website:{' '}
+                        {website?.replace(/(^\w+:|^)\/\//, '')}
                     </LinkButton>
                 </>
             ) : (

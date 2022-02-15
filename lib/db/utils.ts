@@ -17,7 +17,10 @@ export const createUser = async (
         .set(userData)
 }
 
-export const updateUser = async (id: string, data: User): Promise<void> => {
+export const updateUser = async (
+    id: string,
+    data: Partial<User>
+): Promise<void> => {
     await firebase
         .firestore()
         .collection('users')
@@ -39,6 +42,17 @@ export const addFavorite = async (
 export const createBuilder = async (
     id: string,
     data: Builder
+): Promise<void> => {
+    await firebase
+        .firestore()
+        .collection('builders')
+        .doc(id)
+        .set(data, { merge: true })
+}
+
+export const updateBuilder = async (
+    id: string,
+    data: Partial<Builder>
 ): Promise<void> => {
     await firebase
         .firestore()

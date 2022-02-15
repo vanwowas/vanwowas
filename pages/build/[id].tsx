@@ -17,6 +17,7 @@ import { Build, Builder } from '../../lib/types/db'
 import { addFavorite } from '../../lib/db/utils'
 import { fontSize } from '../../lib/style/typography'
 import Contacts from '../../lib/components/Contacts'
+import { useRouter } from 'next/dist/client/router'
 
 const HeaderImage = styled.div`
     position: relative;
@@ -77,11 +78,13 @@ const ManufactureDetailLink = styled(LinkButton)`
 type Props = {
     build: Build
     builder: Builder
+    isFavorite: boolean
 }
 
-const BuildDetailPage: React.FC<Props> = ({ build, builder }) => {
+const BuildDetailPage: React.FC<Props> = ({ build, builder, isFavorite }) => {
     const AuthUser = useAuthUser()
     const { title, description, images, price } = build
+    const router = useRouter()
     return (
         <Page user={AuthUser} withPadding>
             {images?.length && (
@@ -95,13 +98,16 @@ const BuildDetailPage: React.FC<Props> = ({ build, builder }) => {
                     <Title>{title}</Title>
                     <RoundButton
                         round
-                        backgroundColor="secondary"
+                        backgroundColor={isFavorite ? 'primary' : 'secondary'}
                         color="light"
                         borderColor="light"
                         onClick={async () => {
-                            AuthUser.id
-                                ? await addFavorite(AuthUser.id, build.id)
-                                : console.log('TODO: redirect to login')
+                            if (AuthUser.id) {
+                                await addFavorite(AuthUser.id, build.id)
+                                router.replace(router.asPath)
+                            } else {
+                                router.push('/login')
+                            }
                         }}
                     >
                         <Heart />
@@ -125,25 +131,34 @@ const BuildDetailPage: React.FC<Props> = ({ build, builder }) => {
         </Page>
     )
 }
-export const getServerSideProps = withAuthUserTokenSSR()(async ({ query }) => {
-    const { id } = query
-    if (typeof id === 'string') {
-        const build = await db.getBuild(id)
+export const getServerSideProps = withAuthUserTokenSSR()(
+    async ({ query, AuthUser }) => {
+        const { id } = query
+        if (typeof id === 'string') {
+            const build = await db.getBuild(id)
+            let isFavorite = false
+            if (AuthUser.id) {
+                const user = await db.getUser(AuthUser.id)
+                if (user?.favorites?.includes(id)) {
+                    isFavorite = true
+                }
+            }
 
-        if (build) {
-            const builder = await db.getBuilder(build?.userId)
-            if (builder) {
-                return {
-                    props: { build, builder },
+            if (build) {
+                const builder = await db.getBuilder(build?.userId)
+                if (builder) {
+                    return {
+                        props: { build, builder, isFavorite },
+                    }
                 }
             }
         }
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
-    return {
-        redirect: {
-            destination: '/',
-            permanent: false,
-        },
-    }
-})
+)
 export default withAuthUser<Props>()(BuildDetailPage)

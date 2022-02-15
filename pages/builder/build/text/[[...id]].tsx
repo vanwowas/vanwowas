@@ -11,6 +11,7 @@ import styled from 'styled-components'
 import Button from '../../../../lib/components/Button'
 import Editor from '../../../../lib/components/Editor'
 import Input from '../../../../lib/components/Input'
+import LoadingContainer from '../../../../lib/components/LoadingContainer'
 import Page from '../../../../lib/components/Page'
 import db from '../../../../lib/db'
 import { updateBuild } from '../../../../lib/db/utils'
@@ -54,20 +55,27 @@ const BuildText: React.FC<Props> = ({ build }) => {
     const AuthUser = useAuthUser()
     const [editor, setEditor] = useState(build?.description || '')
     const router = useRouter()
+    const [loading, setLoading] = useState(false)
     const onSubmit = useCallback(
         async (event: HTMLFormEvent) => {
             event.preventDefault()
+            setLoading(true)
             if (!AuthUser.id) return
             const { title, price } = event.target
 
-            const id = await updateBuild({
-                title: title.value,
-                description: editor,
-                price: price.value,
-                userId: AuthUser.id,
-                id: build?.id,
-            })
-            router.push(`/builder/build/images/${id}`)
+            try {
+                const id = await updateBuild({
+                    title: title.value,
+                    description: editor,
+                    price: price.value,
+                    userId: AuthUser.id,
+                    id: build?.id,
+                })
+                await router.push(`/builder/build/images/${id}`)
+                setLoading(false)
+            } catch (error) {
+                setLoading(false)
+            }
         },
         [AuthUser.id, build?.id, editor, router]
     )
@@ -76,42 +84,46 @@ const BuildText: React.FC<Props> = ({ build }) => {
             <Headline1>
                 Erstelle hier ein Ausbau-Konzepte für dein Profil
             </Headline1>
-            <Form onSubmit={onSubmit}>
-                <div>
-                    <Headline2>Wie willst du deinen Ausbau nennen?</Headline2>
-                    <Input
-                        placeholder="Titel"
-                        type="text"
-                        name="title"
-                        defaultValue={build?.title}
-                    />
-                </div>
-                <div>
-                    <Headline2>
-                        Wo geht es preislich bei dem Ausbau los?
-                    </Headline2>
-                    <Input
-                        defaultValue={build?.price}
-                        type="number"
-                        placeholder="ab Preis €"
-                        name="price"
-                    />
-                </div>
-                <div>
-                    <Headline2>Beschreibe deinen Ausbau</Headline2>
-                    <StyledEditor onChange={setEditor} value={editor} />
-                </div>
-                <div>
-                    <Button
-                        type="submit"
-                        borderColor="dark"
-                        backgroundColor="primary"
-                        color="dark"
-                    >
-                        weiter zu den Bildern
-                    </Button>
-                </div>
-            </Form>
+            <LoadingContainer loading={loading}>
+                <Form onSubmit={onSubmit}>
+                    <div>
+                        <Headline2>
+                            Wie willst du deinen Ausbau nennen?
+                        </Headline2>
+                        <Input
+                            placeholder="Titel"
+                            type="text"
+                            name="title"
+                            defaultValue={build?.title}
+                        />
+                    </div>
+                    <div>
+                        <Headline2>
+                            Wo geht es preislich bei dem Ausbau los?
+                        </Headline2>
+                        <Input
+                            defaultValue={build?.price}
+                            type="number"
+                            placeholder="ab Preis €"
+                            name="price"
+                        />
+                    </div>
+                    <div>
+                        <Headline2>Beschreibe deinen Ausbau</Headline2>
+                        <StyledEditor onChange={setEditor} value={editor} />
+                    </div>
+                    <div>
+                        <Button
+                            type="submit"
+                            borderColor="dark"
+                            backgroundColor="primary"
+                            color="dark"
+                        >
+                            weiter zu den Bildern
+                        </Button>
+                    </div>
+                </Form>
+            </LoadingContainer>
         </StyledPage>
     )
 }

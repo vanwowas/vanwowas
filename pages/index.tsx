@@ -15,11 +15,11 @@ import Page from '../lib/components/Page'
 import BuildCard from '../lib/components/BuildCard'
 import FindManufactur from '../lib/components/FindManufactur'
 import { Image as ImageType } from '../lib/types/db'
-import { Headline1 } from '../lib/style/typography'
+import { BodyL, fontSize, Headline1 } from '../lib/style/typography'
 import { Build } from '../lib/types/db'
 import db from '../lib/db'
 import PageImageStage from '../lib/components/PageImageStage'
-import Link from 'next/link'
+import Link from '../lib/components/Link'
 
 const Content = styled.div`
     ${stack('5rem', 'y')}
@@ -34,6 +34,10 @@ const Content = styled.div`
         margin-left: auto;
         margin-right: auto;
     }
+    ${Link} {
+        font-size: ${fontSize.bodyL};
+        color: ${colors.secondary};
+    }
 `
 
 const CardContainer = styled.div`
@@ -45,6 +49,7 @@ const CardContainer = styled.div`
         grid-template-columns: 1fr;
         grid-template-row: 1fr 1fr 1fr;
         grid-gap: 4rem;
+        padding-left: 1.25rem;
     }
 `
 
@@ -114,14 +119,14 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                     />
                     <TeaserCard
                         cta="inspiration"
-                        image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/inspiration.jpg?alt=media"
+                        image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/inspiration.jpeg?alt=media"
                         href="/inspiration"
                         headline="Inspirieren lassen"
                         description="Bilder durchstöbern und Inspiration finden. Gefunde Manufakturen als Favoriten in deinem Konto speichern"
                     />
                     <TeaserCard
                         cta="blog"
-                        image="/action.jpg"
+                        image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/about-camping.jpeg?alt=media"
                         href="/blog"
                         headline="Rund um's campen"
                         description="Wie suche ich den passenden Bus? Welche Manufaktur passt zu mir? Kurze Artikel beantworten Deine Camper-Fragen"
@@ -137,10 +142,10 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                         alt=""
                         layout="fill"
                         objectFit="cover"
-                        src="https://images.unsplash.com/photo-1524556079002-ba22995b7af7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1364&q=80"
+                        src="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/action.jpg?alt=media"
                     />
                 </ImageWithText>
-                <p>
+                <BodyL>
                     Auf VanWoWas sammeln wir sie alle und Bringen Dich und deine
                     perfekt pasenden Ausbauer:innen zusammen. Am besten, Du
                     richtest dir mit drei clicks deinen{' '}
@@ -159,7 +164,7 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                     </Link>{' '}
                     Nützliches, spaßiges und Tipps zum Camperkauf und Ausbau --
                     Checkt gern unsere Newsletter.
-                </p>
+                </BodyL>
 
                 <FindManufactur />
                 <div ref={findRef} />

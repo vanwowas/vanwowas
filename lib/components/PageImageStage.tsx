@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { upToBreakpoint } from '../style/breakpoints'
 import colors from '../style/colors'
+import { BodyL } from '../style/typography'
 import Image from './Image'
 
 const Stage = styled.div`
@@ -36,16 +37,16 @@ const Headline = styled.div`
     }
 `
 
-const IntroText = styled.div`
+const IntroText = styled(BodyL)`
     bottom: 2rem;
     left: 15%;
     position: absolute;
     z-index: 2;
     color: #fff;
-    font-size: 1.1rem;
     ${upToBreakpoint('medium')} {
         left: 1rem;
     }
+    font-weight: 700;
 `
 
 type Props = {

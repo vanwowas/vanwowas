@@ -9,14 +9,15 @@ import {
 import Page from '../lib/components/Page'
 import styled from 'styled-components'
 import colors from '../lib/style/colors'
-import UserIcon from '../lib/style/icons/user.svg'
 import { stack } from '../lib/style/mixins'
-import { Headline1 } from '../lib/style/typography'
+import { Headline1, Headline2 } from '../lib/style/typography'
 import { LinkButton } from '../lib/components/Button'
 import Link from 'next/link'
 import db from '../lib/db'
 import { Build, User } from '../lib/types/db'
 import BuildCard from '../lib/components/BuildCard'
+import UploadProfileImage from '../lib/components/UploadProfileImage'
+import ProfileImage from '../lib/components/ProfileImage'
 
 const StyledPage = styled(Page)`
     --stage-height: 40vh;
@@ -39,9 +40,6 @@ const Stage = styled.div`
     justify-content: center;
     ${stack('2rem', 'y')}
     color: ${colors.textColor.white};
-    & > svg {
-        width: 4rem;
-    }
     & > ${Headline1} {
         color: ${colors.textColor.white};
     }
@@ -55,15 +53,11 @@ type Props = {
 const UserPage: React.FC<Props> = ({ user, favorites }) => {
     const AuthUser = useAuthUser()
     const { name, isBuilder } = user
-
-    // const handleFavoriteClick = useCallback(() => {
-    //     alert('remove favorite from list')
-    // }, [])
-
     return (
         <StyledPage user={AuthUser} withPadding>
             <Stage>
-                <UserIcon />
+                <ProfileImage photoURL={AuthUser.photoURL} />
+                <UploadProfileImage>Profilbild ändern</UploadProfileImage>
                 <Headline1>Moin, {name}</Headline1>
                 {isBuilder && (
                     <Link passHref href="/builder/general">
@@ -78,6 +72,11 @@ const UserPage: React.FC<Props> = ({ user, favorites }) => {
                 )}
             </Stage>
             <Headline1>Deine Favoriten</Headline1>
+            {favorites.length === 0 && (
+                <Headline2 style={{ color: colors.grey }}>
+                    Noch keinen Favoriten gespeichert...
+                </Headline2>
+            )}
             {favorites.map((build) => (
                 <BuildCard build={build} key={build.id} />
             ))}

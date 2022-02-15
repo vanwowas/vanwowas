@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components'
 
 export const fontSize = {
-    body1: '1rem',
+    bodyM: '1rem',
+    bodyL: '1.3rem',
     headline1: '2rem',
     headline2: '1.5rem',
 }
@@ -15,8 +16,11 @@ export const typoStyle = {
         font-size: ${fontSize.headline2};
         margin-bottom: 1.25rem;
     `,
-    body1: css`
-        font-size: ${fontSize.body1};
+    bodyM: css`
+        font-size: ${fontSize.bodyM};
+    `,
+    bodyL: css`
+        font-size: ${fontSize.bodyL};
     `,
 }
 
@@ -28,6 +32,10 @@ export const Headline2 = styled.h2`
     ${typoStyle.h2}
 `
 
-export const Paragraph = styled.p`
-    ${typoStyle.body1}
+export const BodyM = styled.p`
+    ${typoStyle.bodyM}
+`
+
+export const BodyL = styled.p`
+    ${typoStyle.bodyL}
 `

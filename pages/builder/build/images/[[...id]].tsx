@@ -11,6 +11,7 @@ import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import Button from '../../../../lib/components/Button'
 import ImageDrop, { ImageFile } from '../../../../lib/components/ImageDrop'
+import LoadingContainer from '../../../../lib/components/LoadingContainer'
 import Page from '../../../../lib/components/Page'
 import db from '../../../../lib/db'
 import { updateBuild } from '../../../../lib/db/utils'
@@ -29,7 +30,9 @@ const AddImages: React.FC<Props> = ({ build }) => {
     const AuthUser = useAuthUser()
     const router = useRouter()
     const [images, setImages] = useState<ImageFile[]>([])
+    const [loading, setLoading] = useState(false)
     const submit = useCallback(async () => {
+        setLoading(true)
         const storage = firebase.storage()
         const storageRef = storage.ref()
         const snapshots: Image[] = []
@@ -41,39 +44,45 @@ const AddImages: React.FC<Props> = ({ build }) => {
                 snapshots.push({
                     url,
                     description: image.description || null,
+                    mainImage: image.mainImage,
                 })
             } else {
                 snapshots.push({
                     url: image.url,
                     description: image.description || null,
+                    mainImage: image.mainImage,
                 })
             }
         }
-        console.log({
-            ...build,
-            images: [...snapshots],
-        })
-        await updateBuild({
-            ...build,
-            images: [...snapshots],
-        })
-        router.push('/builder/builds')
+
+        try {
+            await updateBuild({
+                ...build,
+                images: [...snapshots],
+            })
+            await router.push('/builder/builds')
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+        }
     }, [build, images, router])
 
     return (
         <StyledPage user={AuthUser} withPadding>
             <Headline1>Füge hier Fotos hinzu</Headline1>
-            <ImageDrop defaultImages={build.images} onChange={setImages} />
-            <div>
-                <Button
-                    color="dark"
-                    backgroundColor="primary"
-                    borderColor="dark"
-                    onClick={submit}
-                >
-                    fertig
-                </Button>
-            </div>
+            <LoadingContainer loading={loading}>
+                <ImageDrop defaultImages={build.images} onChange={setImages} />
+                <div>
+                    <Button
+                        color="dark"
+                        backgroundColor="primary"
+                        borderColor="dark"
+                        onClick={submit}
+                    >
+                        fertig
+                    </Button>
+                </div>
+            </LoadingContainer>
         </StyledPage>
     )
 }
