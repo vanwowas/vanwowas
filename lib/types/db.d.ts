@@ -4,7 +4,8 @@ export type Builder = {
     zip: string
     phone?: string
     name: string
-    images?: Image[]
+    website?: string
+    headerImage?: string
 }
 
 export type GeneralInfos = {
@@ -28,6 +29,7 @@ export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 export type User = {
     name: string
     isBuilder: boolean
+    verified?: boolean
     favorites?: string[]
 }
 
@@ -36,4 +38,5 @@ export type Builds = FirebaseFirestore.QueryDocumentSnapshot<Build>[]
 export type Image = {
     url: string
     description: string | null
+    mainImage: boolean
 }

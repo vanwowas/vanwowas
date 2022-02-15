@@ -5,31 +5,34 @@ import {
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 import { useRouter } from 'next/dist/client/router'
-import React, { FormEvent, useCallback } from 'react'
+import React, { FormEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import Button from '../../lib/components/Button'
+import Editor from '../../lib/components/Editor'
 import Input from '../../lib/components/Input'
+import LoadingContainer from '../../lib/components/LoadingContainer'
 import Page from '../../lib/components/Page'
 import TextArea from '../../lib/components/TextArea'
+import UploadBuilderHeaderImage from '../../lib/components/UploadBuilderHeaderImage'
 import db from '../../lib/db'
 import { createBuilder, updateUser } from '../../lib/db/utils'
 import colors from '../../lib/style/colors'
 import { stack } from '../../lib/style/mixins'
 import { Headline1 } from '../../lib/style/typography'
 import { Builder, User } from '../../lib/types/db'
-
+import Image from 'next/image'
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {
         name: {
-            value: string
-        }
-        about: {
             value: string
         }
         zip: {
             value: string
         }
         phone: {
+            value: string
+        }
+        website: {
             value: string
         }
     }
@@ -45,83 +48,125 @@ const Form = styled.form`
     }
 `
 
+const StyledEditor = styled(Editor)`
+    background-color: ${colors.white};
+`
+
+const StyledUploadBuilderHeaderImage = styled(UploadBuilderHeaderImage)`
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+`
+
 type Props = {
     user: User
     builder: Builder | null
 }
 
 const General: React.FC<Props> = ({ user, builder }) => {
+    const { name } = user
     const AuthUser = useAuthUser()
     const router = useRouter()
-    const { name } = user
+    const [loading, setLoading] = useState(false)
+    const [about, setAbout] = useState(builder?.description || '')
 
     const submit = useCallback(
         async (event: HTMLFormEvent) => {
             event.preventDefault()
-            const { name, about, zip, phone } = event.target
+            setLoading(true)
+            const { name, zip, phone, website } = event.target
             if (!AuthUser.id || !AuthUser.email) return
-            await updateUser(AuthUser.id, { name: name.value, isBuilder: true })
+            try {
+                await updateUser(AuthUser.id, {
+                    name: name.value,
+                    isBuilder: true,
+                })
 
-            await createBuilder(AuthUser.id, {
-                description: about.value,
-                phone: phone.value,
-                zip: zip.value,
-                name: name.value,
-                email: AuthUser.email,
-            })
-            router.push('/builder/builds')
+                await createBuilder(AuthUser.id, {
+                    description: about,
+                    phone: phone.value,
+                    zip: zip.value,
+                    name: name.value,
+                    email: AuthUser.email,
+                    website: website.value,
+                })
+                await router.push('/builder/builds')
+                setLoading(false)
+            } catch (error) {
+                setLoading(false)
+            }
         },
-        [AuthUser.email, AuthUser.id, router]
+        [AuthUser.email, AuthUser.id, about, router]
     )
 
     return (
         <Page user={AuthUser} withPadding>
-            <Form onSubmit={submit}>
-                <Headline1>Name</Headline1>
-                <Input
-                    type="text"
-                    defaultValue={name}
-                    placeholder="Dein Name"
-                    name="name"
-                />
-                <Headline1>Über dich</Headline1>
-                <TextArea
-                    defaultValue={builder?.description}
-                    placeholder="Beschreibe deine Manufaktur ein bisschen..."
-                    rows={5}
-                    name="about"
-                />
-                <Headline1>Wo baust du aus?</Headline1>
-                <Input
-                    placeholder="PLZ"
-                    type="text"
-                    defaultValue={builder?.zip}
-                    inputMode="numeric"
-                    maxLength={5}
-                    minLength={5}
-                    name="zip"
-                    pattern="^(?(^00000(|-0000))|(\d{5}(|-\d{4})))$"
-                />
-                <Headline1>Telefon</Headline1>
-                <Input
-                    placeholder="Telefonnummer"
-                    defaultValue={builder?.phone}
-                    type="text"
-                    name="phone"
-                    inputMode="numeric"
-                />
-                <div>
-                    <Button
-                        type="submit"
-                        disabled={false}
-                        backgroundColor="secondary"
-                        borderColor="dark"
-                        color="dark"
-                    >
-                        weiter
-                    </Button>
-                </div>
-            </Form>
+            <LoadingContainer loading={loading}>
+                <Form onSubmit={submit}>
+                    <Headline1>Manufaktur Name</Headline1>
+                    <Input
+                        type="text"
+                        defaultValue={name}
+                        placeholder="Dein Name"
+                        name="name"
+                    />
+                    {builder?.headerImage && (
+                        <div
+                            style={{ position: 'relative', marginTop: '2rem' }}
+                        >
+                            <Image
+                                src={builder.headerImage}
+                                width="250"
+                                height="150"
+                                layout="fixed"
+                                alt="Manufaktur Bild"
+                                objectFit="cover"
+                            />
+                        </div>
+                    )}
+                    <StyledUploadBuilderHeaderImage>
+                        Manufaktur Foto
+                    </StyledUploadBuilderHeaderImage>
+                    <Headline1>Über die Manufaktur</Headline1>
+                    <StyledEditor onChange={setAbout} value={about} />
+                    <Headline1>Wo wird ausgebaut?</Headline1>
+                    <Input
+                        placeholder="PLZ"
+                        type="text"
+                        defaultValue={builder?.zip}
+                        inputMode="numeric"
+                        maxLength={5}
+                        minLength={5}
+                        name="zip"
+                        pattern="^(?(^00000(|-0000))|(\d{5}(|-\d{4})))$"
+                    />
+                    <Headline1>Telefon</Headline1>
+                    <Input
+                        placeholder="Telefonnummer"
+                        defaultValue={builder?.phone}
+                        type="text"
+                        name="phone"
+                        inputMode="numeric"
+                    />
+                    <Headline1>Webseite</Headline1>
+                    <Input
+                        placeholder="Webseite"
+                        defaultValue={builder?.website}
+                        type="text"
+                        name="website"
+                    />
+                    <div>
+                        <Button
+                            type="submit"
+                            disabled={false}
+                            backgroundColor="secondary"
+                            borderColor="dark"
+                            color="dark"
+                        >
+                            weiter
+                        </Button>
+                    </div>
+                </Form>
+            </LoadingContainer>
         </Page>
     )
 }

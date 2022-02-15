@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Image from 'next/image'
 import { aspectRatio, border, stack } from '../style/mixins'
 import React from 'react'
-import { Headline2, Paragraph } from '../style/typography'
+import { Headline2, BodyM } from '../style/typography'
 import colors from '../style/colors'
 import Link, { LinkProps } from 'next/link'
 import { LinkButton } from './Button'
@@ -25,7 +25,7 @@ const Info = styled.div`
     ${Headline2} {
         color: ${colors.teaserCard.headline};
     }
-    ${Paragraph} {
+    ${BodyM} {
         color: ${colors.teaserCard.description};
     }
 `
@@ -62,7 +62,7 @@ const TeaserCard: React.FC<Props> = ({
             </ImageContainer>
             <Info>
                 <Headline2>{headline}</Headline2>
-                <Paragraph>{description}</Paragraph>
+                <BodyM>{description}</BodyM>
             </Info>
             {href && (
                 <Link href={href} passHref>

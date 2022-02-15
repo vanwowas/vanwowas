@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { upFromBreakpoint } from '../style/breakpoints'
 import colors from '../style/colors'
 import { stack } from '../style/mixins'
-import { Headline1, Paragraph } from '../style/typography'
+import { Headline1, BodyL } from '../style/typography'
 
 type Props = {
     headline: string
@@ -22,7 +22,7 @@ const Intro = styled.section<Pick<Props, 'fullWidth'>>`
   ${Headline1} {
         color: ${colors.textColor.secondary};
     }
-    ${Paragraph} {
+    ${BodyL} {
         color: ${colors.textColor.black};
     }
 `
@@ -36,7 +36,7 @@ const IntroText: React.FC<Props> = ({
     return (
         <Intro className={className} fullWidth={fullWidth}>
             <Headline1>{headline}</Headline1>
-            <Paragraph>{text}</Paragraph>
+            <BodyL>{text}</BodyL>
         </Intro>
     )
 }

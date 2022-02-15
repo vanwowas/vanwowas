@@ -9,9 +9,10 @@ export type ButtonProps = {
     shakeHover?: boolean
     round?: boolean
     onClick?: () => void
+    small?: boolean
 }
 
-const buttonStyle = css<ButtonProps>`
+export const buttonStyle = css<ButtonProps>`
     --border-radius: ${(p) => (p.round ? '100rem' : '0.5rem')};
     outline: none;
     border: none;
@@ -24,6 +25,7 @@ const buttonStyle = css<ButtonProps>`
     color: ${(p) => colors.buttonText[p.color]};
     position: relative;
     z-index: 0;
+
     ${hover(css`
         transform: translate3d(0.2em, 0.2em, 0);
     `)}
@@ -47,6 +49,21 @@ const buttonStyle = css<ButtonProps>`
         z-index: -1;
         transition: transform 250ms ease-in-out;
     }
+    ${(p) =>
+        p.small &&
+        css`
+            padding: 0.2rem 0.5rem;
+            ::before {
+                content: '';
+                display: block;
+                position: absolute;
+                border-radius: var(--border-radius);
+                top: -0.2em;
+                right: 0.2em;
+                bottom: 0.2em;
+                left: -0.2em;
+            }
+        `}
     ${(p) =>
         border(
             2,

@@ -46,7 +46,7 @@ const StyledRichtext = styled(Richtext)`
         background: linear-gradient(
             0deg,
             rgba(255, 255, 255, 1) 0%,
-            transparent 100%
+            rgba(255, 255, 255, 0) 100%
         );
     }
 `

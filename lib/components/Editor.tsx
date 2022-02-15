@@ -46,7 +46,6 @@ const Editor: React.FC<Props> = ({ onChange, value, className }) => {
                         [{ header: [1, 2, false] }],
                         ['bold', 'italic', 'underline'],
                         [{ list: 'ordered' }, { list: 'bullet' }],
-                        ['link'],
                     ],
                 }}
             />

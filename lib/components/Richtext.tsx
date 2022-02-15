@@ -1,7 +1,5 @@
 import styled from 'styled-components'
-import colors from '../style/colors'
 import { typoStyle } from '../style/typography'
-import { linkStyle } from './Link'
 
 const Container = styled.div`
     h1 {
@@ -12,10 +10,6 @@ const Container = styled.div`
     }
     p {
         ${typoStyle.body1}
-    }
-    a {
-        ${linkStyle};
-        color: ${colors.primary};
     }
 `
 

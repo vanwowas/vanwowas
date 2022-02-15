@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import colors from '../style/colors'
 import { FileDrop } from 'react-file-drop'
@@ -10,6 +10,7 @@ import { upToBreakpoint } from '../style/breakpoints'
 import Delete from '../style/icons/delete.svg'
 
 import Button from '../components/Button'
+import Checkbox from './Checkbox'
 const Container = styled.div<{ empty: boolean; isDragActive: boolean }>`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -76,6 +77,13 @@ const RoundButton = styled(Button)`
     }
 `
 
+const MainImage = styled.div`
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+`
+
 export type ImageFile = Image & {
     file?: File
 }
@@ -89,7 +97,13 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
     const [isDragActive, setIsDragActive] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [images, setImages] = useState<Image[] | null>(defaultImages)
-
+    const [mainImage, setMainImage] = useState(() => {
+        const index = images?.findIndex((i) => i.mainImage === true)
+        if (index && index >= 0) {
+            return index
+        }
+        return 0
+    })
     const handleFrameDrag = useCallback(
         (isDragging: boolean) => {
             if (isDragActive !== isDragging) {
@@ -107,6 +121,7 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
                 file: f,
                 description: null,
                 url: URL.createObjectURL(f),
+                mainImage: false,
             }))
             onChange([...(images ?? []), ...files])
             setImages([...(images ?? []), ...files])
@@ -121,6 +136,19 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
 
     const empty = !images?.length
 
+    useEffect(() => {
+        const data = images?.map((img, i) => ({
+            ...img,
+            mainImage: i === mainImage,
+        }))
+        if (data) {
+            setImages(data)
+            onChange(data)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mainImage])
+
+    console.log(images)
     return (
         <FileDrop
             onDragOver={() => handleFrameDrag(true)}
@@ -136,6 +164,7 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
                             layout="fill"
                             objectFit="cover"
                         />
+
                         <RoundButton
                             round
                             backgroundColor="secondary"
@@ -163,6 +192,18 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
                                 }}
                             />
                         </ImageOverlay>
+                        <MainImage>
+                            <Checkbox
+                                checked={mainImage === index}
+                                onChange={() => {
+                                    if (index !== mainImage) {
+                                        setMainImage(index)
+                                    }
+                                }}
+                            >
+                                Hauptbild
+                            </Checkbox>
+                        </MainImage>
                     </ImageContainer>
                 ))}
                 <AddButton

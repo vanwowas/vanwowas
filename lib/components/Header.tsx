@@ -4,12 +4,12 @@ import Button, { LinkButton } from './Button'
 import Link from './Link'
 import { stack } from '../style/mixins'
 import { AuthUserContext } from 'next-firebase-auth'
-import User from '../style/icons/user.svg'
 import RouterLink from 'next/link'
 import Logo from '../style/icons/logo.svg'
 import { upToBreakpoint } from '../style/breakpoints'
 import colors from '../style/colors'
 import { useRouter } from 'next/dist/client/router'
+import ProfileImage from './ProfileImage'
 
 const Container = styled.header`
     position: sticky;
@@ -135,13 +135,18 @@ const Header: React.FC<Props> = ({ user }) => {
             ) : (
                 <LinkContainer>
                     <RouterLink href="/user">
-                        <User />
+                        <a>
+                            <ProfileImage photoURL={user.photoURL} small />
+                        </a>
                     </RouterLink>
                     <Button
                         backgroundColor="secondary"
                         borderColor="dark"
                         color="dark"
-                        onClick={user.signOut}
+                        onClick={() => {
+                            user.signOut()
+                            window.location.reload()
+                        }}
                     >
                         logout
                     </Button>
