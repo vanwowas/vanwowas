@@ -10,6 +10,7 @@ const {
     FIREBASE_AUTH_DOMAIN,
     FIREBASE_PROJECT_ID,
     FIREBASE_APP_ID,
+    FIREBASE_STORAGE_BUCKET,
 } = publicRuntimeConfig
 
 const initAuth: () => void = () => {
@@ -31,7 +32,7 @@ const initAuth: () => void = () => {
             authDomain: FIREBASE_AUTH_DOMAIN,
             projectId: FIREBASE_PROJECT_ID,
             appId: FIREBASE_APP_ID,
-            storageBucket: 'vanwowas-f6f3b.appspot.com',
+            storageBucket: FIREBASE_STORAGE_BUCKET,
         },
         cookies: {
             name: 'vanwowas', // required

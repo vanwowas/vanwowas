@@ -18,7 +18,10 @@ import { updateBuild } from '../../../../lib/db/utils'
 import colors from '../../../../lib/style/colors'
 import { stack } from '../../../../lib/style/mixins'
 import { Headline1, Headline2 } from '../../../../lib/style/typography'
-import { Build } from '../../../../lib/types/db'
+import { Build, Builder } from '../../../../lib/types/db'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const geofire = require('geofire-common')
 
 interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
     target: EventTarget & {
@@ -49,9 +52,10 @@ const StyledEditor = styled(Editor)`
 
 type Props = {
     build?: Build
+    builder: Builder
 }
 
-const BuildText: React.FC<Props> = ({ build }) => {
+const BuildText: React.FC<Props> = ({ build, builder }) => {
     const AuthUser = useAuthUser()
     const [editor, setEditor] = useState(build?.description || '')
     const router = useRouter()
@@ -62,14 +66,24 @@ const BuildText: React.FC<Props> = ({ build }) => {
             setLoading(true)
             if (!AuthUser.id) return
             const { title, price } = event.target
+            const place = await fetch(`/api/geohash?zip=${builder.zip}`).then(
+                (e) => e.json()
+            )
 
             try {
+                const geohash = geofire.geohashForLocation([
+                    place.lat,
+                    place.lon,
+                ])
                 const id = await updateBuild({
                     title: title.value,
                     description: editor,
-                    price: price.value,
+                    price: Number(price.value),
                     userId: AuthUser.id,
                     id: build?.id,
+                    geohash,
+                    lat: place.lat,
+                    lon: place.lon,
                 })
                 await router.push(`/builder/build/images/${id}`)
                 setLoading(false)
@@ -77,7 +91,7 @@ const BuildText: React.FC<Props> = ({ build }) => {
                 setLoading(false)
             }
         },
-        [AuthUser.id, build?.id, editor, router]
+        [AuthUser.id, build?.id, builder.zip, editor, router]
     )
     return (
         <StyledPage user={AuthUser} withPadding>
@@ -135,9 +149,12 @@ export const getServerSideProps = withAuthUserTokenSSR({
         const build = params?.id
             ? await db.getBuild(params?.id?.toString())
             : null
+
+        const builder = await db.getBuilder(AuthUser.id)
         return {
             props: {
                 build: build && build.userId === AuthUser.id ? build : null,
+                builder,
             },
         }
     }

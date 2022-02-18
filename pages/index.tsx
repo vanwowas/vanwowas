@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 import IntroText from '../lib/components/IntroText'
 import { aspectRatio, stack } from '../lib/style/mixins'
@@ -13,13 +13,16 @@ import {
 } from 'next-firebase-auth'
 import Page from '../lib/components/Page'
 import BuildCard from '../lib/components/BuildCard'
-import FindManufactur from '../lib/components/FindManufactur'
+import FindManufactur, {
+    OnFindChangeEvent,
+} from '../lib/components/FindManufactur'
 import { Image as ImageType } from '../lib/types/db'
 import { BodyL, fontSize, Headline1 } from '../lib/style/typography'
 import { Build } from '../lib/types/db'
 import db from '../lib/db'
 import PageImageStage from '../lib/components/PageImageStage'
 import Link from '../lib/components/Link'
+import { buildURLQuery } from '../lib/utils/db'
 
 const Content = styled.div`
     ${stack('5rem', 'y')}
@@ -77,16 +80,28 @@ type Props = {
     images: ImageType[]
 }
 
-const IndexPage: React.FC<Props> = ({ builds }) => {
+const IndexPage: React.FC<Props> = ({ builds: initialBuilds }) => {
     const AuthUser = useAuthUser()
     const findRef = useRef<HTMLDivElement>(null)
+    const [builds, setBuilds] = useState(initialBuilds)
     const goToFind = useCallback(() => {
         if (!findRef.current) return null
-        const findPosition = findRef.current.getBoundingClientRect().top + 200
+        const findPosition = findRef.current.getBoundingClientRect().top + 400
         if (findPosition) {
             window.scrollTo({ top: findPosition, behavior: 'smooth' })
         }
     }, [])
+
+    const handleFindChange = useCallback(
+        async ({ place, price }: OnFindChangeEvent) => {
+            const params = buildURLQuery({ price, ...place })
+            const newBuilds = await fetch(`/api/get-builds?${params}`).then(
+                (e) => e.json()
+            )
+            setBuilds(newBuilds)
+        },
+        []
+    )
     return (
         <Page user={AuthUser} withPadding>
             <PageImageStage
@@ -166,8 +181,8 @@ const IndexPage: React.FC<Props> = ({ builds }) => {
                     Checkt gern unsere Newsletter.
                 </BodyL>
 
-                <FindManufactur />
                 <div ref={findRef} />
+                <FindManufactur onChange={handleFindChange} />
                 {builds.map((b) => (
                     <BuildCard key={b.id} build={b} />
                 ))}

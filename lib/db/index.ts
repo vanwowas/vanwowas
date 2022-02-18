@@ -1,6 +1,9 @@
 import { getFirebaseAdmin } from 'next-firebase-auth'
-import { Build, Builder, User } from '../types/db'
+import { Build, Builder, Place, User } from '../types/db'
 import { Image } from '../types/db'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const geofire = require('geofire-common')
+
 const converter = <T>() => ({
     toFirestore: (data: Partial<T>) => data,
     fromFirestore: (snap: FirebaseFirestore.QueryDocumentSnapshot) =>
@@ -32,11 +35,28 @@ const getBuild = async (id: string): Promise<Build | undefined> => {
     }
 }
 
-const getBuilds = async (): Promise<Build[]> => {
+const getBuilds = async (place?: Place, price?: number): Promise<Build[]> => {
     const data: Build[] = []
+
     await (
-        await dataPoint<Build>('builds').get()
+        await dataPoint<Build>('builds')
+            .where('price', '<=', price || 10000000)
+            .get()
     ).forEach((build) => data.push({ ...build.data(), id: build.id }))
+    if (place) {
+        data.sort((a, b) => {
+            const aDistance = geofire.distanceBetween(
+                [a.lat, a.lon],
+                [place.lat, place.lon]
+            )
+            const bDistance = geofire.distanceBetween(
+                [b.lat, b.lon],
+                [place.lat, place.lon]
+            )
+
+            return aDistance > bDistance ? 1 : -1
+        })
+    }
     return data
 }
 

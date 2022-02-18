@@ -18,9 +18,19 @@ export type Build = {
     id: string
     title: string
     description: string
-    price: string
+    price: number
     images: Image[] | null
     userId: string
+    geohash: string
+    lat: number
+    lon: number
+}
+
+export type Place = {
+    zipCode: string
+    name: string
+    lat: number
+    lon: number
 }
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>

@@ -148,7 +148,6 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mainImage])
 
-    console.log(images)
     return (
         <FileDrop
             onDragOver={() => handleFrameDrag(true)}
@@ -174,7 +173,6 @@ const ImageDrop: React.FC<Props> = ({ defaultImages, onChange }) => {
                                 const data = images.filter(
                                     (i) => i.url !== img.url
                                 )
-                                console.log(data)
                                 setImages(data)
                                 onChange(data)
                             }}
