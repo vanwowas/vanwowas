@@ -44,6 +44,12 @@ export const Headline2 = styled.h2<Props>`
     color: ${(p) => colors[p.color || 'dark']};
 `
 
+export const Headline3 = styled.h3<Props>`
+    ${typoStyle.h3};
+
+    color: ${(p) => colors[p.color || 'dark']};
+`
+
 export const BodyM = styled.p<Props>`
     ${typoStyle.bodyM};
     color: ${(p) => colors[p.color || 'dark']};

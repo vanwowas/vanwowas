@@ -10,7 +10,7 @@ import Page from '../lib/components/Page'
 import styled from 'styled-components'
 import colors from '../lib/style/colors'
 import { stack } from '../lib/style/mixins'
-import { Headline1, Headline2 } from '../lib/style/typography'
+import { Headline1, Headline2, Headline3 } from '../lib/style/typography'
 import { LinkButton } from '../lib/components/Button'
 import Link from 'next/link'
 import db from '../lib/db'
@@ -71,23 +71,23 @@ const UserPage: React.FC<Props> = ({ user, favorites }) => {
                     </Link>
                 )}
             </Stage>
-            <Headline1>Deine Favoriten</Headline1>
+            <Headline2 color="secondary">Deine Favoriten</Headline2>
             {favorites.length === 0 && (
-                <Headline2 style={{ color: colors.grey }}>
+                <Headline3 color="grey">
                     Noch keinen Favoriten gespeichert...
-                </Headline2>
+                </Headline3>
             )}
             {favorites.map((build) => (
                 <BuildCard build={build} key={build.id} />
             ))}
-            <Headline1>
+            <Headline2 color="secondary">
                 {isBuilder ? 'Zu deinen Konzepten' : 'Du baust für andere aus?'}
-            </Headline1>
+            </Headline2>
             <div>
                 <LinkButton
                     backgroundColor="secondary"
                     borderColor="dark"
-                    color="dark"
+                    color="light"
                     href={isBuilder ? '/builder/builds' : '/builder/general'}
                 >
                     {isBuilder ? 'deine Konzepte' : 'Dann geht es hier weiter'}
@@ -117,4 +117,6 @@ export const getServerSideProps = withAuthUserTokenSSR({
     }
 })
 
-export default withAuthUser<Props>()(UserPage)
+export default withAuthUser<Props>({
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(UserPage)

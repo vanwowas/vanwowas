@@ -1,8 +1,8 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import { aspectRatio, border, stack } from '../style/mixins'
 import React from 'react'
-import { Headline2, BodyM } from '../style/typography'
+import { Headline3, BodyM } from '../style/typography'
 import colors from '../style/colors'
 import Link, { LinkProps } from 'next/link'
 import { LinkButton } from './Button'
@@ -10,7 +10,13 @@ import { LinkButton } from './Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    ${border(2, 'dark')};
+    ${border(
+        2,
+        'dark',
+        css`
+            border-radius: 0.5rem;
+        `
+    )};
     cursor: pointer;
 `
 
@@ -18,14 +24,13 @@ const ImageContainer = styled.div`
     width: 100%;
     ${aspectRatio(3 / 2)};
     transform: translate3d(-1.25rem, -1.25rem, 0);
+    border-radius: 0.5rem;
+    overflow: hidden;
 `
 
 const Info = styled.div`
     padding: 0 2rem 2rem;
     ${stack('1rem', 'y')}
-    ${Headline2} {
-        color: ${colors.teaserCard.headline};
-    }
     ${BodyM} {
         color: ${colors.teaserCard.description};
     }
@@ -61,7 +66,7 @@ const TeaserCard: React.FC<Props> = ({
                     <Image alt="" objectFit="cover" layout="fill" src={image} />
                 </ImageContainer>
                 <Info>
-                    <Headline2>{headline}</Headline2>
+                    <Headline3 color="tertiary">{headline}</Headline3>
                     <BodyM>{description}</BodyM>
                 </Info>
                 {href && (

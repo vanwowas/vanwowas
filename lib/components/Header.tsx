@@ -129,7 +129,7 @@ const Header: React.FC<Props> = ({ user }) => {
                     <LinkButton
                         backgroundColor="primary"
                         borderColor="dark"
-                        color="dark"
+                        color="light"
                         href={'/login'}
                     >
                         login
@@ -137,7 +137,7 @@ const Header: React.FC<Props> = ({ user }) => {
                     <LinkButton
                         backgroundColor="secondary"
                         borderColor="dark"
-                        color="dark"
+                        color="light"
                         href={'/signup'}
                     >
                         sign up
@@ -153,7 +153,7 @@ const Header: React.FC<Props> = ({ user }) => {
                     <Button
                         backgroundColor="secondary"
                         borderColor="dark"
-                        color="dark"
+                        color="light"
                         onClick={() => {
                             user.signOut()
                             window.location.reload()
