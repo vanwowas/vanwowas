@@ -29,7 +29,7 @@ type Props = {
 
 const Link: React.FC<Props> = ({ children, href, className }) => {
     return (
-        <Container href={href}>
+        <Container href={href} passHref>
             <StyledLink className={className}>{children}</StyledLink>
         </Container>
     )

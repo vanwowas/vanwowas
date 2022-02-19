@@ -17,7 +17,12 @@ const InspirationPage: React.FC<Props> = ({ images }) => {
     const AuthUser = useAuthUser()
 
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Inspiration"
+            description="Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <ImageGrid images={images} />
         </Page>
     )

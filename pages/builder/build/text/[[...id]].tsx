@@ -94,7 +94,12 @@ const BuildText: React.FC<Props> = ({ build, builder }) => {
         [AuthUser.id, build?.id, builder.zip, editor, router]
     )
     return (
-        <StyledPage user={AuthUser} withPadding>
+        <StyledPage
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Ausbau Text"
+            description="Ausbau, Text, Konzept, Camper Manufaktur finden. Ausbauen von Vans in Deutschland."
+        >
             <Headline1>
                 Erstelle hier ein Ausbau-Konzepte für dein Profil
             </Headline1>

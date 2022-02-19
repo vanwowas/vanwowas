@@ -54,7 +54,12 @@ const UserPage: React.FC<Props> = ({ user, favorites }) => {
     const AuthUser = useAuthUser()
     const { name, isBuilder } = user
     return (
-        <StyledPage user={AuthUser} withPadding>
+        <StyledPage
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Profil"
+            description="User, Profile, Profil, Account, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <Stage>
                 <ProfileImage photoURL={AuthUser.photoURL} />
                 <UploadProfileImage>Profilbild ändern</UploadProfileImage>

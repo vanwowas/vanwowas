@@ -55,7 +55,12 @@ const Reset: React.FC = () => {
     }, [])
 
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Passwort zurücksetzen"
+            description="Passwort zurücksetzen,Registrierung, Signup, Login, Account, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <LoadingContainer loading={loading}>
                 <Form onSubmit={handleSubmit}>
                     {!finished ? (

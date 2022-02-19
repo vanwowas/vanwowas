@@ -68,7 +68,12 @@ const AddImages: React.FC<Props> = ({ build }) => {
     }, [build, images, router])
 
     return (
-        <StyledPage user={AuthUser} withPadding>
+        <StyledPage
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Ausbau Bilder"
+            description="Ausbau, Bilder, Konzept, Camper Manufaktur finden. Ausbauen von Vans in Deutschland."
+        >
             <Headline1>Füge hier Fotos hinzu</Headline1>
             <LoadingContainer loading={loading}>
                 <ImageDrop defaultImages={build.images} onChange={setImages} />

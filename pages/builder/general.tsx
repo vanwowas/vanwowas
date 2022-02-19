@@ -99,7 +99,12 @@ const General: React.FC<Props> = ({ user, builder }) => {
     )
 
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Manufaktur Profil"
+            description=" Manufaktur Profil, bearbeiten, Profil, Camper Manufaktur finden. Ausbauen von Vans in Deutschland."
+        >
             <LoadingContainer loading={loading}>
                 <Form onSubmit={submit}>
                     <Headline1>Manufaktur Name</Headline1>

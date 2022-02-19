@@ -5,7 +5,7 @@ import React from 'react'
 import { Headline3, BodyM } from '../style/typography'
 import colors from '../style/colors'
 import Link, { LinkProps } from 'next/link'
-import { LinkButton } from './Button'
+import Button from './Button'
 
 const Container = styled.div`
     display: flex;
@@ -36,7 +36,7 @@ const Info = styled.div`
     }
 `
 
-const StyledButton = styled(LinkButton)`
+const StyledButton = styled(Button)`
     position: absolute;
     top: calc(100% - 1rem);
     right: 1rem;

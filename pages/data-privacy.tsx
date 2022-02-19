@@ -10,7 +10,12 @@ const DataPrivacy: React.FC = () => {
     const AuthUser = useAuthUser()
 
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Impressum"
+            description="Data Privacy, Datenschutz, Rechtliches, Kontakt, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <h1>Datenschutzerklärung</h1>
 
             <h2>1. Datenschutz auf einen Blick Allgemeine Hinweise</h2>

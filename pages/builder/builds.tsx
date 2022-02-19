@@ -39,7 +39,12 @@ const AddBuild: React.FC<Props> = ({ builds }) => {
     const AuthUser = useAuthUser()
 
     return (
-        <StyledPage user={AuthUser} withPadding>
+        <StyledPage
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Ausbau Konzepte"
+            description="Ausbau Konzepte, Manufaktur Profil, bearbeiten, Profil, Camper Manufaktur finden. Ausbauen von Vans in Deutschland."
+        >
             <Headline1>
                 Hier kannst Du deine Konzepte bearbeiten oder Neue erstellen
             </Headline1>

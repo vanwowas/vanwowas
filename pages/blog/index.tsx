@@ -31,7 +31,12 @@ type Props = {
 const Blog: React.FC<Props> = () => {
     const AuthUser = useAuthUser()
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Impressum"
+            description="Blog, Magazin, Artikel, Rund ums campen, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <Container>
                 <Headline1>Kommt bald... </Headline1>
                 <Headline2>

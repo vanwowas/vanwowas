@@ -1,11 +1,8 @@
 import { AuthUserContext } from 'next-firebase-auth'
+import { NextSeo } from 'next-seo'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import {
-    breakpoints,
-    upFromBreakpoint,
-    upToBreakpoint,
-} from '../style/breakpoints'
+import { breakpoints, upToBreakpoint } from '../style/breakpoints'
 import Footer from './Footer'
 import Header from './Header'
 
@@ -33,14 +30,24 @@ const Content = styled.div<Pick<Props, 'withPadding'>>`
 `
 
 type Props = {
+    title: string
+    description: string
     user: AuthUserContext
     className?: string
     withPadding?: boolean
 }
 
-const Page: React.FC<Props> = ({ children, user, className, withPadding }) => {
+const Page: React.FC<Props> = ({
+    children,
+    user,
+    className,
+    withPadding,
+    title,
+    description,
+}) => {
     return (
         <>
+            <NextSeo title={title} description={description} />
             <Header user={user} />
             <Main>
                 <Content className={className} withPadding={withPadding}>

@@ -10,7 +10,12 @@ const Imprint: React.FC = () => {
     const AuthUser = useAuthUser()
 
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Impressum"
+            description="Impressum, Rechtliches, Kontakt, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <h1>Angaben gem&auml;&szlig; &sect; 5 TMG:</h1>
 
             <p>

@@ -60,7 +60,12 @@ const Signup: React.FC = () => {
     }, [])
 
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Registrierung"
+            description="Registrierung, Signup, Login, Account, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <LoadingContainer loading={loading}>
                 <Form onSubmit={signup}>
                     <Headline1>Account erstellen</Headline1>

@@ -97,7 +97,12 @@ const IndexPage: React.FC<Props> = ({ builds: initialBuilds }) => {
         []
     )
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Home"
+            description="Camper Manufaktur finden. Ausbauen von Vans in Deutschland."
+        >
             <PageImageStage
                 headline={
                     <StageHeadlineContainer>

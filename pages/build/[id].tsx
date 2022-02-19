@@ -86,7 +86,12 @@ const BuildDetailPage: React.FC<Props> = ({ build, builder, isFavorite }) => {
     const { title, description, images, price } = build
     const router = useRouter()
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title={`VanWoWas - ${build.title}`}
+            description={`VanWoWas - ${build.title} ${builder.name} ${builder.description} ${builder.zip} ${builder.website} Camper Manufaktur finden. Ausbauen von Vans in Deutschland.`}
+        >
             {images?.length && (
                 <HeaderImage>
                     <Image

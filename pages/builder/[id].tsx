@@ -56,7 +56,12 @@ type Props = {
 const Builder: React.FC<Props> = ({ builder, builds }) => {
     const AuthUser = useAuthUser()
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Ausbau Konzepte"
+            description="Manufaktur Profil, Profil, Camper Manufaktur finden. Ausbauen von Vans in Deutschland."
+        >
             {builder.headerImage ? (
                 <PageImageStage
                     headline={<h1>{builder.name}</h1>}

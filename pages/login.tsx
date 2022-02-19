@@ -77,7 +77,12 @@ const Login: React.FC = () => {
     }, [])
 
     return (
-        <Page user={AuthUser} withPadding>
+        <Page
+            user={AuthUser}
+            withPadding
+            title="VanWoWas - Login"
+            description="Anmelden,Registrierung, Signup, Login, Account, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+        >
             <LoadingContainer loading={loading}>
                 <Form onSubmit={login}>
                     <Headline1>LOGIN</Headline1>
