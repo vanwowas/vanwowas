@@ -12,6 +12,9 @@ export const hover = (
                 }
             }
         }
+        :hover {
+            text-decoration: underline;
+        }
         :active {
             ::before {
                 ${style}

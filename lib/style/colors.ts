@@ -5,15 +5,20 @@ const primary = '#3F8379'
 const secondary = '#E15D3F'
 const tertiary = '#85CA93'
 const grey = '#b9b9b9'
+const dark = '#000'
+const sand = '#FFC15E'
+const warn = '#7D1538'
 
 const colors = {
     secondary,
     grey,
+    warn,
     tertiary,
     lightGrey,
     primary,
     white,
-
+    dark,
+    sand,
     pageBackground: lightGrey,
     headerBackground: white,
     footerBackground: white,

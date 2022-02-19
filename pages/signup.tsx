@@ -12,7 +12,6 @@ import {
     withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 import Link from '../lib/components/Link'
-import { useRouter } from 'next/dist/client/router'
 import { createUser } from '../lib/db/utils'
 import LoadingContainer from '../lib/components/LoadingContainer'
 
@@ -31,41 +30,34 @@ interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
 }
 
 const Form = styled.form`
-    ${stack('16px', 'y')}
+    ${stack('1rem', 'y')}
     max-width: 600px;
-    padding: 1rem;
     margin: auto;
 `
 
 const Signup: React.FC = () => {
     const AuthUser = useAuthUser()
-    const router = useRouter()
     const [loading, setLoading] = useState(false)
 
-    const signup = useCallback(
-        async (event: HTMLFormEvent) => {
-            event.preventDefault()
-            setLoading(true)
+    const signup = useCallback(async (event: HTMLFormEvent) => {
+        event.preventDefault()
+        setLoading(true)
 
-            const { email, password, name } = event.target
-            //TODO catch errors
-            try {
-                await createUser({
-                    email: email.value,
-                    password: password.value,
-                    name: name.value,
-                    isBuilder: false,
-                })
+        const { email, password, name } = event.target
+        try {
+            await createUser({
+                email: email.value,
+                password: password.value,
+                name: name.value,
+                isBuilder: false,
+            })
 
-                await router.push('/user')
-                setLoading(false)
-            } catch (e) {
-                setLoading(false)
-                console.log(e)
-            }
-        },
-        [router]
-    )
+            setLoading(false)
+        } catch (e) {
+            setLoading(false)
+            console.log(e)
+        }
+    }, [])
 
     return (
         <Page user={AuthUser} withPadding>
@@ -113,4 +105,4 @@ export const getServerSideProps = withAuthUserTokenSSR({
     whenAuthed: AuthAction.REDIRECT_TO_APP,
 })()
 
-export default withAuthUser()(Signup)
+export default withAuthUser({ whenAuthed: AuthAction.REDIRECT_TO_APP })(Signup)

@@ -1,9 +1,11 @@
 import { getFirebaseAdmin } from 'next-firebase-auth'
+import initAuth from '../firebase/initAuth'
 import { Build, Builder, Place, User } from '../types/db'
 import { Image } from '../types/db'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const geofire = require('geofire-common')
 
+initAuth()
 const converter = <T>() => ({
     toFirestore: (data: Partial<T>) => data,
     fromFirestore: (snap: FirebaseFirestore.QueryDocumentSnapshot) =>

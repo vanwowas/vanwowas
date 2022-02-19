@@ -10,7 +10,8 @@ import { LinkButton } from './Button'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    ${border(2, 'dark')}
+    ${border(2, 'dark')};
+    cursor: pointer;
 `
 
 const ImageContainer = styled.div`
@@ -30,7 +31,7 @@ const Info = styled.div`
     }
 `
 
-const StyledLinkButton = styled(LinkButton)`
+const StyledButton = styled(LinkButton)`
     position: absolute;
     top: calc(100% - 1rem);
     right: 1rem;
@@ -44,7 +45,6 @@ type Props = {
     href?: LinkProps['href']
     cta: string
     image: string
-    onButtonClick?: () => void
 }
 
 const TeaserCard: React.FC<Props> = ({
@@ -53,39 +53,28 @@ const TeaserCard: React.FC<Props> = ({
     href,
     cta,
     image,
-    onButtonClick,
 }) => {
     return (
-        <Container>
-            <ImageContainer>
-                <Image alt="" objectFit="cover" layout="fill" src={image} />
-            </ImageContainer>
-            <Info>
-                <Headline2>{headline}</Headline2>
-                <BodyM>{description}</BodyM>
-            </Info>
-            {href && (
-                <Link href={href} passHref>
-                    <StyledLinkButton
+        <Link href={`${href}`} passHref>
+            <Container>
+                <ImageContainer>
+                    <Image alt="" objectFit="cover" layout="fill" src={image} />
+                </ImageContainer>
+                <Info>
+                    <Headline2>{headline}</Headline2>
+                    <BodyM>{description}</BodyM>
+                </Info>
+                {href && (
+                    <StyledButton
                         backgroundColor="secondary"
                         borderColor="dark"
                         color="light"
                     >
                         {cta}
-                    </StyledLinkButton>
-                </Link>
-            )}
-            {onButtonClick && (
-                <StyledLinkButton
-                    backgroundColor="secondary"
-                    borderColor="dark"
-                    color="light"
-                    onClick={onButtonClick}
-                >
-                    {cta}
-                </StyledLinkButton>
-            )}
-        </Container>
+                    </StyledButton>
+                )}
+            </Container>
+        </Link>
     )
 }
 

@@ -17,7 +17,7 @@ import FindManufactur, {
     OnFindChangeEvent,
 } from '../lib/components/FindManufactur'
 import { Image as ImageType } from '../lib/types/db'
-import { BodyL, fontSize, Headline1 } from '../lib/style/typography'
+import { BodyL, Headline1 } from '../lib/style/typography'
 import { Build } from '../lib/types/db'
 import db from '../lib/db'
 import PageImageStage from '../lib/components/PageImageStage'
@@ -36,10 +36,6 @@ const Content = styled.div`
         max-width: 250px;
         margin-left: auto;
         margin-right: auto;
-    }
-    ${Link} {
-        font-size: ${fontSize.bodyL};
-        color: ${colors.secondary};
     }
 `
 
@@ -69,10 +65,8 @@ const ImageWithText = styled.div`
 
 const StageHeadlineContainer = styled.div``
 
-const StageHeadline = styled(Headline1)<{ color: string }>`
-    font-size: 2.5rem;
+const StageHeadline = styled(Headline1)`
     margin-bottom: 0rem;
-    color: ${(p) => p.color};
 `
 
 type Props = {
@@ -84,13 +78,13 @@ const IndexPage: React.FC<Props> = ({ builds: initialBuilds }) => {
     const AuthUser = useAuthUser()
     const findRef = useRef<HTMLDivElement>(null)
     const [builds, setBuilds] = useState(initialBuilds)
-    const goToFind = useCallback(() => {
-        if (!findRef.current) return null
-        const findPosition = findRef.current.getBoundingClientRect().top + 400
-        if (findPosition) {
-            window.scrollTo({ top: findPosition, behavior: 'smooth' })
-        }
-    }, [])
+    // const goToFind = useCallback(() => {
+    //     if (!findRef.current) return null
+    //     const findPosition = findRef.current.getBoundingClientRect().top + 400
+    //     if (findPosition) {
+    //         window.scrollTo({ top: findPosition, behavior: 'smooth' })
+    //     }
+    // }, [])
 
     const handleFindChange = useCallback(
         async ({ place, price }: OnFindChangeEvent) => {
@@ -107,15 +101,11 @@ const IndexPage: React.FC<Props> = ({ builds: initialBuilds }) => {
             <PageImageStage
                 headline={
                     <StageHeadlineContainer>
-                        <StageHeadline color={colors.primary}>
+                        <StageHeadline color={'primary'}>
                             Traumcamper
                         </StageHeadline>
-                        <StageHeadline color={colors.secondary}>
-                            bauen
-                        </StageHeadline>
-                        <StageHeadline color={colors.tertiary}>
-                            lassen
-                        </StageHeadline>
+                        <StageHeadline color={'secondary'}>bauen</StageHeadline>
+                        <StageHeadline color={'tertiary'}>lassen</StageHeadline>
                     </StageHeadlineContainer>
                 }
                 url={
@@ -127,7 +117,6 @@ const IndexPage: React.FC<Props> = ({ builds: initialBuilds }) => {
                     <TeaserCard
                         cta="finden"
                         image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/manufaktur.JPG?alt=media"
-                        onButtonClick={goToFind}
                         href="/"
                         headline="Manufaktur finden"
                         description="Postleitzahl und Budget eingeben und alle passenden Manufakturen werden für dich aufgelistet"

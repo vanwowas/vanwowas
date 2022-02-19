@@ -24,10 +24,10 @@ const animation = keyframes`
 
 const Loader = styled.div`
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: -1rem;
+    left: -1rem;
+    right: -1rem;
+    bottom: -1rem;
     background-color: ${`rgba(${hexToRgb(colors.secondary)}, 0.2)`};
     border-radius: 1rem;
     display: flex;

@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components'
+import colors from './colors'
 
 export const fontSize = {
     bodyM: '1rem',
     bodyL: '1.3rem',
-    headline1: '2rem',
-    headline2: '1.5rem',
+    headline1: '2.6rem',
+    headline2: '2rem',
+    headline3: '1.5rem',
 }
 
 export const typoStyle = {
@@ -16,6 +18,10 @@ export const typoStyle = {
         font-size: ${fontSize.headline2};
         margin-bottom: 1.25rem;
     `,
+    h3: css`
+        font-size: ${fontSize.headline3};
+        margin-bottom: 1.25rem;
+    `,
     bodyM: css`
         font-size: ${fontSize.bodyM};
     `,
@@ -24,18 +30,26 @@ export const typoStyle = {
     `,
 }
 
-export const Headline1 = styled.h1`
-    ${typoStyle.h1}
+type Props = {
+    color?: keyof typeof colors
+}
+
+export const Headline1 = styled.h1<Props>`
+    ${typoStyle.h1};
+    color: ${(p) => colors[p.color || 'dark']};
 `
 
-export const Headline2 = styled.h2`
-    ${typoStyle.h2}
+export const Headline2 = styled.h2<Props>`
+    ${typoStyle.h2};
+    color: ${(p) => colors[p.color || 'dark']};
 `
 
-export const BodyM = styled.p`
-    ${typoStyle.bodyM}
+export const BodyM = styled.p<Props>`
+    ${typoStyle.bodyM};
+    color: ${(p) => colors[p.color || 'dark']};
 `
 
-export const BodyL = styled.p`
+export const BodyL = styled.p<Props>`
     ${typoStyle.bodyL}
+    color: ${(p) => colors[p.color || 'dark']};
 `

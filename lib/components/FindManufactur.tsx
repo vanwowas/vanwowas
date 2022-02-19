@@ -77,7 +77,7 @@ const FindManufactur: React.FC<Props> = ({ onChange }) => {
                     type="number"
                 />
                 <Input
-                    placeholder="Standort PLZ"
+                    placeholder="Deine PLZ"
                     onChange={handleZipChange}
                     maxLength={5}
                     type="text"

@@ -14,13 +14,11 @@ import ProfileImage from './ProfileImage'
 const Container = styled.header`
     position: sticky;
     top: 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     z-index: 10;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
     background-color: ${colors.headerBackground};
-    padding: 2rem;
+
     &.hidden {
         transform: translateY(-100%);
     }
@@ -31,30 +29,43 @@ const Container = styled.header`
         margin: 0 auto;
         cursor: pointer;
     }
-    & > * {
-        ${stack('3rem', 'x')}
+    & > *:last-child {
+        justify-content: flex-end;
         ${upToBreakpoint('medium')} {
-            ${stack('1rem', 'y')}
-        }
-        svg {
-            margin-bottom: 0.5rem;
+            justify-content: space-evenly;
+            align-items: flex-end;
         }
     }
-
+    padding: 3rem;
     ${upToBreakpoint('medium')} {
+        padding: 2rem;
+    }
+    ${upToBreakpoint('small')} {
         padding: 1rem;
     }
 `
 
-const LinkContainer = styled.div``
+const LinkContainer = styled.div`
+    ${stack('3rem', 'x')}
+    align-items:flex-start;
+    ${upToBreakpoint('medium')} {
+        ${stack('1rem', 'y')};
+        justify-content: space-evenly;
+    }
+    button {
+        margin-top: 0.2rem;
+    }
+`
 
 const LogoContainer = styled.div`
-    width: 7rem;
-    ${upToBreakpoint('medium')} {
-        width: 5rem;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
     svg {
-        width: 100%;
+        width: 7rem;
+        ${upToBreakpoint('medium')} {
+            width: 5rem;
+        }
     }
 `
 

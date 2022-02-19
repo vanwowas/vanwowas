@@ -69,7 +69,7 @@ const Price = styled.h1`
 `
 
 const ManufactureDetailLink = styled(LinkButton)`
-    font-size: ${fontSize.headline2};
+    font-size: ${fontSize.headline3};
     margin: 4rem 0;
     display: inline-flex;
     padding: 2rem;

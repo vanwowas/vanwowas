@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-import { upToBreakpoint } from '../style/breakpoints'
+import { breakpoints, upToBreakpoint } from '../style/breakpoints'
 import colors from '../style/colors'
 import { BodyL } from '../style/typography'
 import Image from './Image'
@@ -26,27 +26,34 @@ const HeaderImage = styled(Image)`
     }
 `
 
-const Headline = styled.div`
-    top: 40%;
-    left: 15%;
-    position: absolute;
-    z-index: 2;
+const Content = styled.div`
+    width: 100%;
+    height: 100%;
+    max-width: ${breakpoints.large}px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
     ${upToBreakpoint('medium')} {
-        left: 1rem;
-        top: 30%;
+        padding: 2rem;
+    }
+    ${upToBreakpoint('small')} {
+        padding: 1rem;
     }
 `
 
+const Headline = styled.div`
+    top: 50%;
+    margin-top: 30vh;
+`
+
 const IntroText = styled(BodyL)`
-    bottom: 2rem;
-    left: 15%;
-    position: absolute;
     z-index: 2;
     color: #fff;
-    ${upToBreakpoint('medium')} {
-        left: 1rem;
-    }
     font-weight: 700;
+    margin-top: auto;
+    margin-bottom: 0rem;
 `
 
 type Props = {
@@ -57,11 +64,13 @@ const PageImageStage: React.FC<Props> = ({ url, headline }) => {
     return (
         <Stage>
             <HeaderImage alt="" objectFit="cover" layout="fill" src={url} />
-            <Headline>{headline}</Headline>
-            <IntroText>
-                Camper-Manufaktur in deiner Nähe, zu deinem Preis,
-                <br /> nach deinem Geschmack
-            </IntroText>
+            <Content>
+                <Headline>{headline}</Headline>
+                <IntroText>
+                    Camper-Manufaktur in deiner Nähe, zu deinem Preis,
+                    <br /> nach deinem Geschmack
+                </IntroText>
+            </Content>
         </Stage>
     )
 }

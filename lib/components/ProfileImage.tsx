@@ -9,11 +9,11 @@ const Container = styled.div<Pick<Props, 'small'>>`
     height: ${(p) => (p.small ? 2.5 : 4)}rem;
     border-radius: 4rem;
     overflow: hidden;
-    border: 2px solid ${colors.white};
+    border: 2px solid ${colors.dark};
     display: flex;
     align-items: center;
     justify-content: center;
-    color: ${colors.white};
+    color: ${colors.dark};
     svg {
         width: ${(p) => (p.small ? 1 : 1.75)}rem;
     }

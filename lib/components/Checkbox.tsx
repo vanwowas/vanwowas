@@ -1,20 +1,24 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import React from 'react'
 import colors from '../style/colors'
 import { buttonStyle } from './Button'
+import { typoStyle } from '../style/typography'
+import { hover } from '../style/mixins'
 
 const Label = styled.label`
     display: block;
     position: relative;
     padding-left: 2.5rem;
     cursor: pointer;
-    font-size: 1.2rem;
+    ${typoStyle.bodyM};
     user-select: none;
     border-radius: 0.5rem;
     color: ${colors.white};
-    &:hover input ~ span {
-        background-color: ${colors.secondary};
-    }
+    ${hover(css`
+        input ~ span {
+            background-color: ${colors.secondary};
+        }
+    `)}
 `
 const Input = styled.input`
     position: absolute;

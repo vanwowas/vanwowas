@@ -1,7 +1,11 @@
 import { AuthUserContext } from 'next-firebase-auth'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { breakpoints, upToBreakpoint } from '../style/breakpoints'
+import {
+    breakpoints,
+    upFromBreakpoint,
+    upToBreakpoint,
+} from '../style/breakpoints'
 import Footer from './Footer'
 import Header from './Header'
 
@@ -18,7 +22,10 @@ const Content = styled.div<Pick<Props, 'withPadding'>>`
     ${(p) =>
         p.withPadding &&
         css`
-            padding: 2rem;
+            padding: 3rem;
+            ${upToBreakpoint('medium')} {
+                padding: 2rem;
+            }
             ${upToBreakpoint('small')} {
                 padding: 1rem;
             }
