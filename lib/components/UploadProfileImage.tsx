@@ -1,6 +1,5 @@
 import firebase from 'firebase'
 import { useAuthUser } from 'next-firebase-auth'
-import { useRouter } from 'next/dist/client/router'
 import { ChangeEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { buttonStyle } from './Button'
@@ -21,7 +20,6 @@ type Props = {
 
 const UploadProfileImage: React.FC<Props> = ({ children, className }) => {
     const AuthUser = useAuthUser()
-    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const uploadNewImage = useCallback(
         async (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,13 +32,10 @@ const UploadProfileImage: React.FC<Props> = ({ children, className }) => {
                 await imageRef.put(file)
                 const url = (await imageRef.getDownloadURL()) as string
                 await AuthUser.firebaseUser?.updateProfile({ photoURL: url })
-                await AuthUser.firebaseUser?.reload()
-
-                router.reload()
                 setLoading(false)
             }
         },
-        [AuthUser.firebaseUser, AuthUser.id, router]
+        [AuthUser.firebaseUser, AuthUser.id]
     )
     return (
         <div className={className}>

@@ -45,6 +45,9 @@ const Stage = styled.div`
     }
 `
 
+const StyledLinkButton = styled(LinkButton)`
+    margin-right: auto;
+`
 type Props = {
     user: User
     favorites: Build[]
@@ -88,16 +91,14 @@ const UserPage: React.FC<Props> = ({ user, favorites }) => {
             <Headline2 color="secondary">
                 {isBuilder ? 'Zu deinen Konzepten' : 'Du baust für andere aus?'}
             </Headline2>
-            <div>
-                <LinkButton
-                    backgroundColor="secondary"
-                    borderColor="dark"
-                    color="light"
-                    href={isBuilder ? '/builder/builds' : '/builder/general'}
-                >
-                    {isBuilder ? 'deine Konzepte' : 'Dann geht es hier weiter'}
-                </LinkButton>
-            </div>
+            <StyledLinkButton
+                backgroundColor="secondary"
+                borderColor="dark"
+                color="light"
+                href={isBuilder ? '/builder/builds' : '/builder/general'}
+            >
+                {isBuilder ? 'deine Konzepte' : 'Dann geht es hier weiter'}
+            </StyledLinkButton>
         </StyledPage>
     )
 }

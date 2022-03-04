@@ -122,7 +122,7 @@ const IndexPage: React.FC<Props> = ({ builds: initialBuilds }) => {
                     <TeaserCard
                         cta="finden"
                         image="https://firebasestorage.googleapis.com/v0/b/vanwowas-f6f3b.appspot.com/o/manufaktur.JPG?alt=media"
-                        href="/"
+                        href="/manufaktur"
                         headline="Manufaktur finden"
                         description="Postleitzahl und Budget eingeben und alle passenden Manufakturen werden für dich aufgelistet"
                     />

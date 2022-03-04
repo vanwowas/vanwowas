@@ -7,6 +7,7 @@ export const fontSize = {
     headline1: '2.6rem',
     headline2: '2rem',
     headline3: '1.5rem',
+    headline4: '1.2rem',
 }
 
 export const typoStyle = {
@@ -20,7 +21,11 @@ export const typoStyle = {
     `,
     h3: css`
         font-size: ${fontSize.headline3};
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.1rem;
+    `,
+    h4: css`
+        font-size: ${fontSize.headline4};
+        margin-bottom: 1rem;
     `,
     bodyM: css`
         font-size: ${fontSize.bodyM};
@@ -46,6 +51,11 @@ export const Headline2 = styled.h2<Props>`
 
 export const Headline3 = styled.h3<Props>`
     ${typoStyle.h3};
+
+    color: ${(p) => colors[p.color || 'dark']};
+`
+export const Headline4 = styled.h4<Props>`
+    ${typoStyle.h4};
 
     color: ${(p) => colors[p.color || 'dark']};
 `

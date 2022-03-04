@@ -14,9 +14,18 @@ export type ButtonProps = {
 
 export const buttonStyle = css<ButtonProps>`
     --border-radius: ${(p) => (p.round ? '100rem' : '0.5rem')};
+    ${(p) =>
+        p.round &&
+        css`
+            width: 4rem;
+            height: 4rem;
+        `}
     outline: none;
     border: none;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     border-radius: var(--border-radius);
     padding: 0.75rem 1rem;

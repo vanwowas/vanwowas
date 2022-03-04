@@ -5,11 +5,11 @@ import {
 } from 'next-firebase-auth'
 import React from 'react'
 import styled from 'styled-components'
-import { LinkButton } from '../../lib/components/Button'
-import Page from '../../lib/components/Page'
-import colors from '../../lib/style/colors'
-import { stack } from '../../lib/style/mixins'
-import { Headline1, Headline3 } from '../../lib/style/typography'
+import { LinkButton } from '../lib/components/Button'
+import Page from '../lib/components/Page'
+import colors from '../lib/style/colors'
+import { stack } from '../lib/style/mixins'
+import { Headline1, Headline3 } from '../lib/style/typography'
 
 const Container = styled.div`
     ${stack('2rem', 'y')};
@@ -24,18 +24,14 @@ const Container = styled.div`
     }
 `
 
-type Props = {
-    blog: string
-}
-
-const Blog: React.FC<Props> = () => {
+const Manufaktur: React.FC = () => {
     const AuthUser = useAuthUser()
     return (
         <Page
             user={AuthUser}
             withPadding
-            title="VanWoWas - Impressum"
-            description="Blog, Magazin, Artikel, Rund ums campen, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
+            title="VanWoWas - Manufaktur finden"
+            description="Entdecken, Manufaktur, Magazin, Artikel, Rund ums campen, Camper Manufaktur finden. Ausbauen von Vans in Deutschland. Inspiration finden. Bilder finden."
         >
             <Container>
                 <Headline1>Kommt bald... </Headline1>
@@ -57,10 +53,9 @@ const Blog: React.FC<Props> = () => {
         </Page>
     )
 }
-export const getServerSideProps = withAuthUserTokenSSR()(async ({ query }) => {
-    const { id } = query
+export const getServerSideProps = withAuthUserTokenSSR()(async ({}) => {
     return {
-        props: { blog: 'blog' + id },
+        props: {},
     }
 })
-export default withAuthUser<Props>()(Blog)
+export default withAuthUser()(Manufaktur)

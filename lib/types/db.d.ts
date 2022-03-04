@@ -17,6 +17,7 @@ export type GeneralInfos = {
 export type Build = {
     id: string
     title: string
+    model: string
     description: string
     price: number
     images: Image[] | null

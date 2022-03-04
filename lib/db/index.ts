@@ -90,10 +90,7 @@ const getUserBuilds = async (id: string): Promise<Build[]> => {
 const getImageSet = async (): Promise<Image[]> => {
     const data: Image[] = []
     await (
-        await dataPoint<Build>('builds')
-            .where('images', '!=', false)
-            .limit(7)
-            .get()
+        await dataPoint<Build>('builds').where('images', '!=', false).get()
     ).forEach((build) => {
         const images = build.data().images
         if (images) {

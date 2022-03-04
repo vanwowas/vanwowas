@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { stack } from '../style/mixins'
+import { Headline3 } from '../style/typography'
 import { Builder } from '../types/db'
 import { LinkButton } from './Button'
 
@@ -24,7 +25,7 @@ const Contacts: React.FC<Props> = ({ className, builder, loggedIn }) => {
     const { phone, email, website } = builder
     return (
         <Container className={className}>
-            <h2>Kontaktdaten</h2>
+            <Headline3>Kontaktdaten</Headline3>
             {loggedIn ? (
                 <>
                     {phone && (

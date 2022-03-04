@@ -28,6 +28,9 @@ interface HTMLFormEvent extends FormEvent<HTMLFormElement> {
         title: {
             value: string
         }
+        model: {
+            value: string
+        }
         price: {
             value: string
         }
@@ -65,7 +68,7 @@ const BuildText: React.FC<Props> = ({ build, builder }) => {
             event.preventDefault()
             setLoading(true)
             if (!AuthUser.id) return
-            const { title, price } = event.target
+            const { title, price, model } = event.target
             const place = await fetch(`/api/geohash?zip=${builder.zip}`).then(
                 (e) => e.json()
             )
@@ -77,6 +80,7 @@ const BuildText: React.FC<Props> = ({ build, builder }) => {
                 ])
                 const id = await updateBuild({
                     title: title.value,
+                    model: model.value,
                     description: editor,
                     price: Number(price.value),
                     userId: AuthUser.id,
@@ -114,6 +118,17 @@ const BuildText: React.FC<Props> = ({ build, builder }) => {
                             type="text"
                             name="title"
                             defaultValue={build?.title}
+                        />
+                    </div>
+                    <div>
+                        <Headline2>
+                            Für welches Fahrzeug ist der Ausbau?
+                        </Headline2>
+                        <Input
+                            placeholder="Fahrzeug"
+                            type="text"
+                            name="model"
+                            defaultValue={build?.model}
                         />
                     </div>
                     <div>

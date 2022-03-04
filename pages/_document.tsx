@@ -40,7 +40,7 @@ export default class AppDocument extends Document {
     }
     render(): ReactElement {
         return (
-            <Html>
+            <Html lang="de">
                 <Head>
                     <link
                         href="https://fonts.googleapis.com/css2?family=Nunito&display=swap"

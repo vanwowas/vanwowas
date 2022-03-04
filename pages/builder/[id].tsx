@@ -69,7 +69,7 @@ const Builder: React.FC<Props> = ({ builder, builds }) => {
                 />
             ) : (
                 <Stage>
-                    <Headline1>{builder.name}</Headline1>
+                    <Headline1 color="white">{builder.name}</Headline1>
                 </Stage>
             )}
             <Content headerImage={!!builder.headerImage}>

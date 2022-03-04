@@ -17,6 +17,7 @@ const StyledQuill = styled(ReactQuill)`
     border-radius: 0.5rem;
     height: 100%;
     ${fadeIn(400)}
+    color: ${colors.dark};
     .ql-toolbar {
         border: 2px solid black;
         border-radius: 0.5rem 0.5rem 0 0;

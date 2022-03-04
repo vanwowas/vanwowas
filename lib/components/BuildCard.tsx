@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import colors from '../style/colors'
 import { aspectRatio, stack } from '../style/mixins'
-import { Headline2 } from '../style/typography'
+import { Headline2, Headline4 } from '../style/typography'
 import Image from './Image'
 import { upFromBreakpoint, upToBreakpoint } from '../style/breakpoints'
 import { Build } from '../types/db'
@@ -17,6 +17,8 @@ const ImageContainer = styled.div`
     ${aspectRatio(4 / 3)}
     margin: 5% 0;
     z-index: 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
 `
 
 const InfoContainer = styled.div`
@@ -107,7 +109,7 @@ type Props = {
 }
 
 const BuildCard: React.FC<Props> = ({ build, editable }) => {
-    const { title, description, images, id } = build
+    const { title, description, images, id, model } = build
     const router = useRouter()
 
     return (
@@ -131,11 +133,8 @@ const BuildCard: React.FC<Props> = ({ build, editable }) => {
             </ImageContainer>
             <InfoContainer>
                 <Headline2>{title}</Headline2>
+                <Headline4 color="grey">{model}</Headline4>
                 <StyledRichtext text={description} />
-                {/*</InfoContainer>  {['cheap', 'nearby'].map((p: any) => (
-                        <React.Fragment key={p}>{icons[p]}</React.Fragment>
-                    ))}
-                </IconContainer> */}
                 {!editable && (
                     <Link href={`/build/${build.id}`} passHref>
                         <SeeMore

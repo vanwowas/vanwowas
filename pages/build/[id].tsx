@@ -9,15 +9,21 @@ import Page from '../../lib/components/Page'
 import Richtext from '../../lib/components/Richtext'
 import db from '../../lib/db'
 import Image from 'next/image'
-import { LinkButton } from '../../lib/components/Button'
+import Button, { LinkButton } from '../../lib/components/Button'
 import Heart from '../../lib/style/icons/heart.svg'
 import colors, { hexToRgb } from '../../lib/style/colors'
 import ImageGrid from '../../lib/components/ImageGrid'
 import { Build, Builder } from '../../lib/types/db'
 import { addFavorite } from '../../lib/db/utils'
-import { fontSize } from '../../lib/style/typography'
+import {
+    fontSize,
+    Headline1,
+    Headline2,
+    Headline3,
+} from '../../lib/style/typography'
 import Contacts from '../../lib/components/Contacts'
 import { useRouter } from 'next/dist/client/router'
+import { upToBreakpoint } from '../../lib/style/breakpoints'
 
 const HeaderImage = styled.div`
     position: relative;
@@ -33,10 +39,14 @@ const HeaderImage = styled.div`
         bottom: 1rem;
         background-color: transparent;
         border: 2px solid white;
+        border-radius: 0.5rem;
+    }
+    * > * {
+        border-radius: 0.5rem;
     }
 `
 
-const Title = styled.h1`
+const Title = styled(Headline1)`
     position: absolute;
     bottom: 2rem;
     left: 2rem;
@@ -44,17 +54,19 @@ const Title = styled.h1`
     padding: 2rem;
     z-index: 1;
     background-color: ${`rgba(${hexToRgb(colors.tertiary)},0.5)`};
-    color: ${colors.white};
+    border-radius: 0.5rem;
+    ${upToBreakpoint('medium')} {
+        right: 3rem;
+    }
 `
 
-const RoundButton = styled(LinkButton)`
-    position: absolute;
-    bottom: 3rem;
-    right: 4rem;
+const SaveAsFavorite = styled(Button)`
+    margin-left: auto;
+    margin-top: -3rem;
+    margin-bottom: 2rem;
     z-index: 1;
     svg {
-        height: 1.5rem;
-        width: 1.5rem;
+        width: 100%;
     }
 `
 
@@ -62,7 +74,7 @@ const StyledImageGrid = styled(ImageGrid)`
     margin: 4rem auto;
 `
 
-const Price = styled.h1`
+const Price = styled(Headline2)`
     span {
         color: ${colors.primary};
     }
@@ -83,7 +95,7 @@ type Props = {
 
 const BuildDetailPage: React.FC<Props> = ({ build, builder, isFavorite }) => {
     const AuthUser = useAuthUser()
-    const { title, description, images, price } = build
+    const { title, description, images, price, model } = build
     const router = useRouter()
     return (
         <Page
@@ -100,28 +112,31 @@ const BuildDetailPage: React.FC<Props> = ({ build, builder, isFavorite }) => {
                         src={images[0].url}
                         alt="Builder Profile"
                     />
-                    <Title>{title}</Title>
-                    <RoundButton
-                        round
-                        backgroundColor={isFavorite ? 'primary' : 'secondary'}
-                        color="light"
-                        borderColor="light"
-                        onClick={async () => {
-                            if (AuthUser.id) {
-                                await addFavorite(AuthUser.id, build.id)
-                                router.replace(router.asPath)
-                            } else {
-                                router.push('/login')
-                            }
-                        }}
-                    >
-                        <Heart />
-                    </RoundButton>
+                    <Title color="white">{title}</Title>
                 </HeaderImage>
             )}
+            <Headline3 color="grey">{model}</Headline3>
+            <SaveAsFavorite
+                round
+                backgroundColor={isFavorite ? 'primary' : 'secondary'}
+                color="light"
+                borderColor="light"
+                onClick={async () => {
+                    if (!isFavorite) {
+                        if (AuthUser.id) {
+                            await addFavorite(AuthUser.id, build.id)
+                            router.replace(router.asPath)
+                        } else {
+                            router.push('/login')
+                        }
+                    }
+                }}
+            >
+                <Heart />
+            </SaveAsFavorite>
             <Richtext text={description} />
             {images && <StyledImageGrid images={images} />}
-            <Price>
+            <Price color="dark">
                 Das Konzept kostet etwa - <span>{price} €</span>
             </Price>
             <ManufactureDetailLink
